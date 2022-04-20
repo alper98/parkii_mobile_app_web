@@ -2,9 +2,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
+import useWindowSize from "../../hooks/useWindowSize";
 import "./Camera.css";
 import ImagePreview from "./components/ImagePreview";
-import useWindowSize from "../../hooks/useWindowSize";
 
 export default function Camera() {
   const webcamRef = useRef(null);
