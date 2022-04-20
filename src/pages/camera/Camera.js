@@ -19,7 +19,7 @@ export default function Camera() {
   const videoConstraints = {
     width: windowSize,
     height: 700,
-    facingMode: "user",
+    facingMode: "environment",
   };
 
   return (
