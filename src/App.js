@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Grid from "@mui/material/Grid";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Footer from "./components/footer/Footer";
+import Camera from "./pages/camera/Camera";
+import Map from "./pages/map/Map";
+import Profile from "./pages/profile/Profile";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Grid container direction="column" height={"100vh"}>
+        <Grid item xs={11} height={"100%"}>
+          <div className="app">
+            <Routes>
+              <Route path="/" element={<Navigate to="/camera" />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/camera" element={<Camera />} />
+              <Route path="/map" element={<Map />} />
+            </Routes>
+          </div>
+        </Grid>
+        <Grid item xs={1}>
+          <Footer />
+        </Grid>
+      </Grid>
+    </BrowserRouter>
   );
 }
 
