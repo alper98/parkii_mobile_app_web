@@ -1,10 +1,12 @@
 import Grid from "@mui/material/Grid";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import Camera from "./pages/camera/Camera";
 import Map from "./pages/map/Map";
 import Profile from "./pages/profile/Profile";
+
 function App() {
   return (
     <BrowserRouter>
