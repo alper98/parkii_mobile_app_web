@@ -2,11 +2,11 @@ import Grid from "@mui/material/Grid";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Footer from "./components/footer/Footer";
 import Camera from "./pages/camera/Camera";
-import Map from "./pages/map/Map";
+import MapComponent from "./pages/map/MapComponent";
 import Profile from "./pages/profile/Profile";
-import "./App.css";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
             <Route path="/" element={<Navigate to="/camera" />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camera" element={<Camera />} />
-            <Route path="/map" element={<Map />} />
+            <Route path="/map" element={<MapComponent />} />
           </Routes>
         </Grid>
         <Grid item xs={1}>

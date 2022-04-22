@@ -496,7 +496,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 426,
         "kategori": "Adressebeboerzone",
-        "navn": "HA",
+        "navn": "yellow",
         "opret_dato": "2018-10-03T11:04:10.834Z",
         "ret_dato": "2022-03-07T13:52:17.012Z",
         "type": 2
@@ -1049,7 +1049,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 502,
         "kategori": "Zone med tidsrestriktion",
-        "navn": "HA",
+        "navn": "yellow",
         "opret_dato": "2018-10-19T09:23:50.657Z",
         "ret_dato": "2021-08-30T12:45:48.043Z",
         "type": null
@@ -1240,7 +1240,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 425,
         "kategori": "Adressebeboerzone",
-        "navn": "VS",
+        "navn": "Green",
         "opret_dato": "2018-10-03T11:15:02.246Z",
         "ret_dato": "2022-03-07T13:52:38.605Z",
         "type": 2
@@ -2212,7 +2212,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 503,
         "kategori": "Zone med tidsrestriktion",
-        "navn": "VS",
+        "navn": "Green",
         "opret_dato": "2018-10-19T09:33:01.473Z",
         "ret_dato": "2021-08-30T12:44:33.820Z",
         "type": null
