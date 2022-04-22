@@ -46,9 +46,8 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "defaults",
+      "not ie 11"
     ],
     "development": [
       "last 1 chrome version",
@@ -61,6 +60,7 @@
     "dotenv": "^16.0.0",
     "eslint-plugin-react-hooks": "^4.4.0",
     "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "worker-loader": "^3.0.8"
   }
 }
