@@ -397,7 +397,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 11,
         "kategori": "Betalingszone",
-        "navn": "Blå",
+        "navn": "Blue",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2020-03-03T08:37:24.257Z",
         "type": null
@@ -496,7 +496,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 426,
         "kategori": "Adressebeboerzone",
-        "navn": "HA",
+        "navn": "yellow",
         "opret_dato": "2018-10-03T11:04:10.834Z",
         "ret_dato": "2022-03-07T13:52:17.012Z",
         "type": 2
@@ -741,7 +741,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 18,
         "kategori": "Betalingszone",
-        "navn": "Blå",
+        "navn": "Blue",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2021-03-05T15:03:56.225Z",
         "type": null
@@ -1049,7 +1049,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 502,
         "kategori": "Zone med tidsrestriktion",
-        "navn": "HA",
+        "navn": "yellow",
         "opret_dato": "2018-10-19T09:23:50.657Z",
         "ret_dato": "2021-08-30T12:45:48.043Z",
         "type": null
@@ -1240,7 +1240,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 425,
         "kategori": "Adressebeboerzone",
-        "navn": "VS",
+        "navn": "Green",
         "opret_dato": "2018-10-03T11:15:02.246Z",
         "ret_dato": "2022-03-07T13:52:38.605Z",
         "type": 2
@@ -1726,11 +1726,11 @@
       "id": "p_zoner_kbh.16",
       "properties": {
         "beboerzone_pdf": null,
-        "beskrivelse": "Rød betalingszone",
+        "beskrivelse": "Red betalingszone",
         "gyldige_licenszoner_flex": null,
         "id": 1,
         "kategori": "Betalingszone",
-        "navn": "Rød",
+        "navn": "Red",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2021-03-05T15:07:33.931Z",
         "type": null
@@ -1988,7 +1988,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 20,
         "kategori": "Betalingszone",
-        "navn": "Blå",
+        "navn": "Blue",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2021-03-08T19:31:05.917Z",
         "type": null
@@ -2212,7 +2212,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 503,
         "kategori": "Zone med tidsrestriktion",
-        "navn": "VS",
+        "navn": "Green",
         "opret_dato": "2018-10-19T09:33:01.473Z",
         "ret_dato": "2021-08-30T12:44:33.820Z",
         "type": null
@@ -5624,7 +5624,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 12,
         "kategori": "Betalingszone",
-        "navn": "Blå",
+        "navn": "Blue",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2020-03-03T08:37:24.257Z",
         "type": null
@@ -6403,11 +6403,11 @@
       "id": "p_zoner_kbh.32",
       "properties": {
         "beboerzone_pdf": null,
-        "beskrivelse": "Grøn betalingszone",
+        "beskrivelse": "Green betalingszone",
         "gyldige_licenszoner_flex": null,
         "id": 512,
         "kategori": "Betalingszone",
-        "navn": "Grøn",
+        "navn": "Green",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2021-03-09T10:20:53.756Z",
         "type": null
@@ -14945,7 +14945,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 10,
         "kategori": "Betalingszone",
-        "navn": "Blå",
+        "navn": "Blue",
         "opret_dato": "2010-02-21T23:00:00Z",
         "ret_dato": "2021-03-05T14:09:52.589Z",
         "type": null
@@ -15086,7 +15086,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 219,
         "kategori": "Betalingszone",
-        "navn": "Gul",
+        "navn": "Yellow",
         "opret_dato": "2016-03-09T11:21:51.647Z",
         "ret_dato": "2021-03-05T15:03:56.225Z",
         "type": null
@@ -15273,7 +15273,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 218,
         "kategori": "Betalingszone",
-        "navn": "Gul",
+        "navn": "Yellow",
         "opret_dato": "2016-03-09T11:21:51.647Z",
         "ret_dato": "2022-03-08T08:52:04.229Z",
         "type": null
@@ -15648,7 +15648,7 @@
         "gyldige_licenszoner_flex": null,
         "id": 217,
         "kategori": "Betalingszone",
-        "navn": "Gul",
+        "navn": "Yellow",
         "opret_dato": "2016-03-09T11:21:51.647Z",
         "ret_dato": "2021-03-09T09:30:24.141Z",
         "type": null

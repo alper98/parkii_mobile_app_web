@@ -1,3 +1,22 @@
-.app{
-    height: 100%;
+.map-container {
+  height: 90vh;
+}
+
+.webcameCapture_button {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.mgl-map-overlay {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+}
+
+.mapboxgl-ctrl-logo  {
+    display: none !important;
+}
+.mapboxgl-ctrl-bottom-right  {
+    display: none !important;
 }

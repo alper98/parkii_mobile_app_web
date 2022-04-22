@@ -1,46 +1,26 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import "../Camera.css";
 
 export default function ImagePreview({ image, setImage }) {
   return (
     <>
-      <img
-        src={image}
-        alt=""
-        style={{
-          border: "2px solid black",
-          objectFit: "none",
-        }}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          "& > *": {
-            m: 1,
-          },
-        }}
-      >
-        <ButtonGroup
-          size="large"
+      <img src={image} alt="" />
+      <Box textAlign="center" padding={2}>
+        <Button
+          style={{ width: "40%", marginRight: "5px" }}
+          color="warning"
+          onClick={() => setImage("")}
           variant="contained"
-          aria-label="large button group"
-          style={{ width: "100%" }}
         >
-          <Button
-            style={{ width: "50%" }}
-            color="warning"
-            onClick={() => setImage("")}
-          >
-            RETRY
-          </Button>
-          <Button style={{ width: "50%" }} color="success">
-            Scan
-          </Button>
-        </ButtonGroup>
+          RETRY
+        </Button>
+        <Button
+          style={{ width: "40%", marginLeft: "5px" }}
+          color="success"
+          variant="contained"
+        >
+          Scan
+        </Button>
       </Box>
     </>
   );
