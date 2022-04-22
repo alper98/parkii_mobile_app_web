@@ -1,25 +1,32 @@
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef } from "react";
 import zones from "../../data.json";
-import "./Map.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYmlnYWxwIiwiYSI6ImNsMjd4dGQ2bzAweGEzaXRwcDNnMnljcnQifQ.zBaMSL1v-DxSMs2dFcYddA";
 
 function Map() {
   const mapContainerRef = useRef(null);
-  const [lng, setLng] = useState(12);
-  const [lat, setLat] = useState(55);
-  const [zoom, setZoom] = useState(16);
+
+  const geolocate = new mapboxgl.GeolocateControl({
+    fitBoundsOptions: {
+      zoom: 16,
+    },
+    trackUserLocation: true,
+    showUserHeading: true,
+  });
 
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: zoom,
+      center: [12.5683371, 55.6760968],
+      zoom: 8,
     });
+    map.addControl(geolocate);
+
     map.on("load", () => {
+      geolocate.trigger();
       map.addSource("parking-zones", {
         type: "geojson",
         data: {
@@ -29,41 +36,21 @@ function Map() {
       });
 
       map.addLayer({
-        id: "park-boundary",
+        id: "parking-boundary",
         type: "fill",
         source: "parking-zones",
         paint: {
-          "fill-color": "#023E8A",
-          "fill-opacity": 0.4,
+          "fill-color": ["get", "navn"],
+          "fill-opacity": 0.25,
         },
         filter: ["==", "$type", "Polygon"],
       });
-    });
-
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-        showUserHeading: true,
-      })
-    );
-    map.on("move", () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
     });
 
     // Clean up on unmount
     return () => map.remove();
   }, []);
 
-  return (
-    <div>
-      <div ref={mapContainerRef} className="map-container" />
-    </div>
-  );
+  return <div ref={mapContainerRef} className="map-container"></div>;
 }
 export default memo(Map);

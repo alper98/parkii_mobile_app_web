@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import useWindowSize from "../../hooks/useWindowSize";
-import "./Camera.css";
 import ImagePreview from "./components/ImagePreview";
 
 export default function Camera() {
@@ -34,12 +33,8 @@ export default function Camera() {
             audio={false}
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
-            style={{
-              border: "2px solid black",
-              objectFit: "fill",
-            }}
           />
-          <Box textAlign="center">
+          <Box textAlign="center" padding={2}>
             <Button
               size="large"
               onClick={capture}
