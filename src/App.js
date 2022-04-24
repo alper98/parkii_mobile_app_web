@@ -7,7 +7,7 @@ import "./App.css";
 import Camera from "./pages/camera/Camera";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
-import NavbarComponent from "./components/NavbarComponent";
+import NavbarComponent from "./components/Navbar/NavbarComponent";
 
 function App() {
   const height = use100vh();
@@ -15,17 +15,15 @@ function App() {
   return (
     <BrowserRouter>
       <Grid container direction="column">
-        <Grid item xs={11}>
-          <NavbarComponent />
-          <div style={{ height: realDeviceHeight }}>
-            <Routes>
-              <Route path="/" element={<Navigate to="/camera" />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/camera" element={<Camera />} />
-              <Route path="/map" element={<MapContainer />} />
-            </Routes>
-          </div>
-        </Grid>
+        <NavbarComponent />
+        <div style={{ height: realDeviceHeight }}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/camera" />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/camera" element={<Camera />} />
+            <Route path="/map" element={<MapContainer />} />
+          </Routes>
+        </div>
       </Grid>
     </BrowserRouter>
   );
