@@ -9,11 +9,12 @@ import { logout } from "../../redux/features/auth/authSlice";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
-
+import { useNavigate } from "react-router-dom";
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((s) => s.auth.user);
 
   const handleOpenNavMenu = (event) => {
@@ -34,6 +35,10 @@ const NavbarComponent = () => {
   const handleLogout = () => {
     setAnchorElUser(null);
     dispatch(logout());
+  };
+
+  const handleClickDesktopMenu = (path) => {
+    navigate(path);
   };
 
   return (
@@ -58,7 +63,9 @@ const NavbarComponent = () => {
                 />
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                <DesktopMenuItems handleCloseNavMenu={handleCloseNavMenu} />
+                <DesktopMenuItems
+                  handleClickDesktopMenu={handleClickDesktopMenu}
+                />
               </Box>
               <Box sx={{ flexGrow: 0 }}>
                 <UserMenuItems

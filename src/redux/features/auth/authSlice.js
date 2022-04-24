@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    token: null,
   },
   reducers: {
     loginSuccess: (state, action) => {
@@ -13,13 +14,16 @@ export const authSlice = createSlice({
     logoutSuccess: (state) => {
       state.user = null;
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
   },
 });
 
 export default authSlice.reducer;
 
 // Actions
-const { loginSuccess, logoutSuccess } = authSlice.actions;
+const { loginSuccess, logoutSuccess, setToken } = authSlice.actions;
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -28,8 +32,11 @@ export const login = (email, password) => async (dispatch) => {
       password: password,
     });
     if (response) {
+      dispatch(setToken(response.data));
+      localStorage.setItem("access_token", response.data.access_token);
       console.log(response.data);
-      dispatch(loginSuccess(response.data));
+      dispatch(loginSuccess(response.data.user));
+      localStorage.setItem("user", response.data.access_token);
     } else {
       return false;
     }
@@ -59,6 +66,7 @@ export const register = (name, email, password) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
+    localStorage.removeItem("access_token");
     return dispatch(logoutSuccess());
   } catch (e) {
     return console.error(e.message);

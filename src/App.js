@@ -17,9 +17,10 @@ import Login from "./pages/login/LoginContainer";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
 
-const ProtectedRoute = ({ user, redirectPath = "/login", children }) => {
+const ProtectedRoute = ({ user, children }) => {
   if (!user) {
-    return <Navigate to={redirectPath} replace />;
+    console.log(user);
+    return <Navigate to="/login" replace />;
   }
   return children ? children : <Outlet />;
 };

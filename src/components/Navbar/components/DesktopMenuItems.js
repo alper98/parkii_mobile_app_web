@@ -4,17 +4,16 @@ import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 
-export function DesktopMenuItems({ handleCloseNavMenu }) {
+export function DesktopMenuItems({ handleClickDesktopMenu }) {
   return (
     <>
       <Button
-        onClick={handleCloseNavMenu}
+        onClick={() => handleClickDesktopMenu("/profile")}
         sx={{
           my: 2,
           color: "white",
           display: "block",
         }}
-        href="Profile"
       >
         <IconButton size="large">
           <PersonIcon fontSize="large" />
@@ -22,13 +21,12 @@ export function DesktopMenuItems({ handleCloseNavMenu }) {
         Profile
       </Button>
       <Button
-        onClick={handleCloseNavMenu}
+        onClick={() => handleClickDesktopMenu("/camera")}
         sx={{
           my: 2,
           color: "white",
           display: "block",
         }}
-        href="Camera"
       >
         <IconButton size="large">
           <LinkedCameraIcon fontSize="large" />
@@ -36,13 +34,12 @@ export function DesktopMenuItems({ handleCloseNavMenu }) {
         Camera
       </Button>
       <Button
-        onClick={handleCloseNavMenu}
+        onClick={() => handleClickDesktopMenu("/map")}
         sx={{
           my: 2,
           color: "white",
           display: "block",
         }}
-        href="Map"
       >
         <IconButton size="large">
           <MapIcon fontSize="large" />

@@ -21,7 +21,7 @@ export function UserMenuItems({
             p: 0,
           }}
         >
-          <Avatar alt={user.user.name} src="/static/images/avatar/2.jpg" />
+          <Avatar alt={user.name} src="/static/images/avatar/2.jpg" />
         </IconButton>
       </Tooltip>
       <Menu
@@ -43,9 +43,7 @@ export function UserMenuItems({
         onClose={handleCloseUserMenu}
       >
         <MenuItem onClick={handleCloseUserMenu}>
-          <Typography textAlign="center">
-            Logged in as: {user.user.name}
-          </Typography>
+          <Typography textAlign="center">Logged in as: {user.name}</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <Typography textAlign="center">Logout</Typography>
