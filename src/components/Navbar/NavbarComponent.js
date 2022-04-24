@@ -12,19 +12,31 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Avatar from "@mui/material/Avatar";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
@@ -50,6 +62,14 @@ const NavbarComponent = () => {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <DesktopMenuItems handleCloseNavMenu={handleCloseNavMenu} />
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <UserMenuItems
+              handleOpenUserMenu={handleOpenUserMenu}
+              anchorElUser={anchorElUser}
+              Boolean={Boolean}
+              handleCloseUserMenu={handleCloseUserMenu}
+            />
           </Box>
         </Toolbar>
       </Container>
@@ -164,6 +184,50 @@ function MobileMenuItems({
             <MapIcon />
           </IconButton>
           Map
+        </MenuItem>
+      </Menu>
+    </>
+  );
+}
+
+function UserMenuItems({
+  handleOpenUserMenu,
+  anchorElUser,
+  Boolean,
+  handleCloseUserMenu,
+}) {
+  return (
+    <>
+      <Tooltip title="Open settings">
+        <IconButton
+          onClick={handleOpenUserMenu}
+          sx={{
+            p: 0,
+          }}
+        >
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{
+          mt: "45px",
+        }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <MenuItem onClick={handleCloseUserMenu}>
+          <Typography textAlign="center">Logout</Typography>
         </MenuItem>
       </Menu>
     </>
