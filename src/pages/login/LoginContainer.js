@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../redux/features/auth/authSlice";
+import { login, register } from "../../redux/features/auth/authSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginContainer() {
   const [isLogIn, setIsLogIn] = useState(true);
@@ -25,10 +25,9 @@ export default function LoginContainer() {
   const handleSignUp = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    dispatch(
+      register(data.get("name"), data.get("email"), data.get("password"))
+    );
   };
 
   useEffect(() => {

@@ -8,10 +8,14 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
 const theme = createTheme();
 
 export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -43,6 +47,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={(e) => setEmail(e.target.value)}
               autoFocus
             />
             <TextField
@@ -53,6 +58,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               label="Password"
               type="password"
               id="password"
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
             />
             <Button
@@ -60,6 +66,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!email || !password}
             >
               Sign In
             </Button>

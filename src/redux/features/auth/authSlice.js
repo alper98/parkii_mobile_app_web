@@ -37,6 +37,26 @@ export const login = (email, password) => async (dispatch) => {
     return console.error(e.message);
   }
 };
+
+export const register = (name, email, password) => async (dispatch) => {
+  console.log(name, email, password);
+  try {
+    const response = await api.post("/api/register", {
+      name: name,
+      email: email,
+      password: password,
+    });
+    console.log(response);
+    if (response) {
+      // dispatch(loginSuccess(response.data.user));
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+
 export const logout = () => async (dispatch) => {
   try {
     return dispatch(logoutSuccess());
