@@ -1,23 +1,9 @@
 import * as turf from "@turf/turf";
 import { useCallback, useEffect, useRef } from "react";
-import Geocode from "react-geocode";
 import { useDispatch, useSelector } from "react-redux";
 import zones from "../../data.json";
-import {
-  setAddress,
-  setCurrentZone,
-  setLat,
-  setLng,
-} from "../../redux/features/map/mapSlice";
+import { setCurrentZone } from "../../redux/features/map/mapSlice";
 import { MapComponent } from "./components/MapComponent";
-
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiYmlnYWxwIiwiYSI6ImNsMjd4dGQ2bzAweGEzaXRwcDNnMnljcnQifQ.zBaMSL1v-DxSMs2dFcYddA";
-
-const GOOGLE_API_KEY = "AIzaSyD-LIMt0ZLOGvNWiQM3pMcI0N2Sa7LNjJ4";
-Geocode.setApiKey(GOOGLE_API_KEY);
-Geocode.setLanguage("en");
-Geocode.setLocationType("ROOFTOP");
 
 const layerStyle = {
   id: "point",
@@ -33,20 +19,7 @@ function MapContainer() {
   const lat = useSelector((state) => state.map.lat);
   const lng = useSelector((state) => state.map.lng);
   const currentZone = useSelector((state) => state.map.currentZone);
-  const address = useSelector((state) => state.map.address);
   let zoneFound = useRef(false);
-
-  Geocode.fromLatLng(lat, lng).then(
-    (response) => {
-      let address = response.results[0].formatted_address;
-      const index = address.lastIndexOf(",");
-      address = address.slice(0, index);
-      dispatch(setAddress(address));
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
 
   const geolocateControlRef = useCallback((ref) => {
     if (ref) {
@@ -85,17 +58,9 @@ function MapContainer() {
 
   return (
     <MapComponent
-      MAPBOX_TOKEN={MAPBOX_TOKEN}
       geolocateControlRef={geolocateControlRef}
-      dispatch={dispatch}
-      setLng={setLng}
-      setLat={setLat}
-      lng={lng}
-      lat={lat}
       zones={zones}
       layerStyle={layerStyle}
-      address={address}
-      currentZone={currentZone}
     />
   );
 }

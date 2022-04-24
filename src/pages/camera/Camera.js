@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useCallback, useRef, useState, useEffect } from "react";
+import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import useWindowSize from "../../hooks/useWindowSize";
 import ImagePreview from "./components/ImagePreview";

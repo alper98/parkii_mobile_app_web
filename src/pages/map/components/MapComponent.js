@@ -1,22 +1,16 @@
-import React from "react";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AddressCard } from "./AddressCard";
+import { setLng, setLat } from "../../../redux/features/map/mapSlice";
 
-export function MapComponent({
-  MAPBOX_TOKEN,
-  geolocateControlRef,
-  setLng,
-  setLat,
-  lat,
-  lng,
-  zones,
-  layerStyle,
-  address,
-  currentZone,
-}) {
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_KEY;
+
+export function MapComponent({ geolocateControlRef, zones, layerStyle }) {
   const dispatch = useDispatch();
+  const lat = useSelector((s) => s.map.lat);
+  const lng = useSelector((s) => s.map.lng);
+
   return (
     <Map
       reuseMaps
@@ -42,7 +36,7 @@ export function MapComponent({
       <Source id="my-data" type="geojson" data={zones}>
         <Layer {...layerStyle} />
       </Source>
-      <AddressCard address={address} zone={currentZone} />
+      <AddressCard />
     </Map>
   );
 }
