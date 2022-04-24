@@ -49,5 +49,8 @@
   },
   "devDependencies": {
     "eslint-plugin-react-hooks": "^4.4.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
   }
 }

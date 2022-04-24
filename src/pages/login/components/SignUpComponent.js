@@ -9,10 +9,15 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
 const theme = createTheme();
 
 export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -41,11 +46,12 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  onChange={(e) => setName(e.target.value)}
+                  id="name"
+                  label="Name"
                   autoFocus
                 />
               </Grid>
@@ -56,6 +62,7 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
                   id="email"
                   label="Email Address"
                   name="email"
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                 />
               </Grid>
@@ -66,6 +73,7 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
                   name="password"
                   label="Password"
                   type="password"
+                  onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   autoComplete="new-password"
                 />
@@ -76,6 +84,7 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!name || !email || !password}
             >
               Sign Up
             </Button>
