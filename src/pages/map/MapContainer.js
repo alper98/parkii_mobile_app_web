@@ -21,13 +21,6 @@ function MapContainer() {
   const currentZone = useSelector((state) => state.map.currentZone);
   let zoneFound = useRef(false);
 
-  const geolocateControlRef = useCallback((ref) => {
-    if (ref) {
-      // Activate as soon as the control is loaded
-      ref.trigger();
-    }
-  }, []);
-
   // running a check everytime lat or lng changes (aka a change in the users location)
   // determines if the currentzone is set and if the user is in the same zone
   // if not, determines the zone the user is in and sets the zone state to that zone
@@ -56,12 +49,6 @@ function MapContainer() {
     }
   }, [lat, lng]);
 
-  return (
-    <MapComponent
-      geolocateControlRef={geolocateControlRef}
-      zones={zones}
-      layerStyle={layerStyle}
-    />
-  );
+  return <MapComponent zones={zones} layerStyle={layerStyle} />;
 }
 export default MapContainer;

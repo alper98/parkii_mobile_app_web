@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
+import { setLat, setLng } from "../../../redux/features/map/mapSlice";
 import { AddressCard } from "./AddressCard";
-import { setLng, setLat } from "../../../redux/features/map/mapSlice";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_KEY;
 
-export function MapComponent({ geolocateControlRef, zones, layerStyle }) {
+export function MapComponent({ zones, layerStyle }) {
   const dispatch = useDispatch();
   const lat = useSelector((s) => s.map.lat);
   const lng = useSelector((s) => s.map.lng);
@@ -23,7 +23,6 @@ export function MapComponent({ geolocateControlRef, zones, layerStyle }) {
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       <GeolocateControl
-        ref={geolocateControlRef}
         positionOptions={{
           enableHighAccuracy: true,
         }}
