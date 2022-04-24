@@ -1,13 +1,13 @@
 import Grid from "@mui/material/Grid";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { use100vh } from "react-div-100vh";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Footer from "./components/footer/Footer";
 import Camera from "./pages/camera/Camera";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
-import { use100vh } from "react-div-100vh";
+import NavbarComponent from "./components/NavbarComponent";
 
 function App() {
   const height = use100vh();
@@ -16,6 +16,7 @@ function App() {
     <BrowserRouter>
       <Grid container direction="column">
         <Grid item xs={11}>
+          <NavbarComponent />
           <div style={{ height: realDeviceHeight }}>
             <Routes>
               <Route path="/" element={<Navigate to="/camera" />} />
@@ -24,9 +25,6 @@ function App() {
               <Route path="/map" element={<MapContainer />} />
             </Routes>
           </div>
-        </Grid>
-        <Grid item xs={1}>
-          <Footer />
         </Grid>
       </Grid>
     </BrowserRouter>
