@@ -18,6 +18,11 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    handleSignUp(email, password);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

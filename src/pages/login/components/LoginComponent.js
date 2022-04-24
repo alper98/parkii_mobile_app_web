@@ -1,5 +1,3 @@
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -16,6 +14,11 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    handleLogin(email, password);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -27,15 +30,12 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
           <Box
             component="form"
-            onSubmit={handleLogin}
+            onSubmit={handleClick}
             noValidate
             sx={{ mt: 1 }}
           >

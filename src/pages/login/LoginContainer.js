@@ -16,18 +16,12 @@ export default function LoginContainer() {
     setIsLogIn(!isLogIn);
   };
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    dispatch(login(data.get("email"), data.get("password")));
+  const handleLogin = (email, password) => {
+    dispatch(login(email, password));
   };
 
-  const handleSignUp = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    dispatch(
-      register(data.get("name"), data.get("email"), data.get("password"))
-    );
+  const handleSignUp = (name, email, password) => {
+    dispatch(register(name, email, password));
   };
 
   useEffect(() => {
@@ -37,7 +31,7 @@ export default function LoginContainer() {
   }, [user]);
 
   return (
-    <div>
+    <>
       {isLogIn ? (
         <LoginComponent
           handleLoginSignUp={handleLoginSignUp}
@@ -49,6 +43,6 @@ export default function LoginContainer() {
           handleSignUp={handleSignUp}
         />
       )}
-    </div>
+    </>
   );
 }

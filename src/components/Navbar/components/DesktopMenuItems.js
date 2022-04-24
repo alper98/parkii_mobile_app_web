@@ -2,7 +2,6 @@ import LinkedCameraIcon from "@mui/icons-material/LinkedCamera";
 import MapIcon from "@mui/icons-material/Map";
 import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 
 export function DesktopMenuItems({ handleClickDesktopMenu }) {
   return (
@@ -15,9 +14,7 @@ export function DesktopMenuItems({ handleClickDesktopMenu }) {
           display: "block",
         }}
       >
-        <IconButton size="large">
-          <PersonIcon fontSize="large" />
-        </IconButton>
+        <PersonIcon fontSize="large" style={{ marginRight: 7 }} />
         Profile
       </Button>
       <Button
@@ -28,9 +25,7 @@ export function DesktopMenuItems({ handleClickDesktopMenu }) {
           display: "block",
         }}
       >
-        <IconButton size="large">
-          <LinkedCameraIcon fontSize="large" />
-        </IconButton>
+        <LinkedCameraIcon fontSize="large" style={{ marginRight: 7 }} />
         Camera
       </Button>
       <Button
@@ -41,9 +36,7 @@ export function DesktopMenuItems({ handleClickDesktopMenu }) {
           display: "block",
         }}
       >
-        <IconButton size="large">
-          <MapIcon fontSize="large" />
-        </IconButton>
+        <MapIcon fontSize="large" style={{ marginRight: 7 }} />
         Map
       </Button>
     </>
