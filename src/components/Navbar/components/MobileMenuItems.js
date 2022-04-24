@@ -4,13 +4,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
 
 export function MobileMenuItems({
   handleOpenNavMenu,
   anchorElNav,
   handleCloseNavMenu,
-  Link,
-  handleLogout,
 }) {
   return (
     <>
@@ -45,19 +44,19 @@ export function MobileMenuItems({
           },
         }}
       >
-        <MenuItem component={Link} to={`/Profile`}>
+        <MenuItem component={Link} to={`/profile`}>
           <IconButton size="large">
             <MenuIcon />
           </IconButton>
           Profile
         </MenuItem>
-        <MenuItem component={Link} to={`/Camera`}>
+        <MenuItem component={Link} to={`/camera`}>
           <IconButton size="large">
             <LinkedCameraIcon />
           </IconButton>
           Camera
         </MenuItem>
-        <MenuItem component={Link} to={`/Map`}>
+        <MenuItem component={Link} to={`/map`}>
           <IconButton size="large">
             <MapIcon />
           </IconButton>
