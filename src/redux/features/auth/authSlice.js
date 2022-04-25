@@ -66,6 +66,7 @@ export const logout = () => async (dispatch) => {
     return console.error(e.message);
   }
 };
+
 export const checkToken = () => async (dispatch) => {
   try {
     const response = await api.get("/user");

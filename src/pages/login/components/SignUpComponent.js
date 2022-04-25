@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 
 const theme = createTheme();
@@ -32,6 +33,9 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
             alignItems: "center",
           }}
         >
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
           <Box
             component="form"
             noValidate

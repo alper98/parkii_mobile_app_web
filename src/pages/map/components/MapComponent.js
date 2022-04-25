@@ -8,12 +8,40 @@ import * as spinner from "../../../lotties/spinner.json";
 import { setLat, setLng } from "../../../redux/features/map/mapSlice";
 import { AddressCard } from "./AddressCard";
 
-const layerStyle = {
-  id: "point",
+const zonesStyle = {
+  id: "zones",
   type: "line",
+  source: "zones",
   paint: {
     "line-color": "black",
-    "line-width": 1,
+    "line-width": 2,
+  },
+};
+
+const restrictionsStyle = {
+  id: "lineLayer",
+  type: "line",
+  source: "restrictions",
+  layout: {
+    "line-join": "round",
+    "line-cap": "round",
+  },
+  paint: {
+    "line-color": "rgba(3, 170, 238, 0.5)",
+    "line-width": 5,
+  },
+};
+
+const restrictionsTextStyle = {
+  id: "symbols",
+  type: "symbol",
+  source: "restrictions",
+  layout: {
+    "symbol-placement": "line",
+    "text-font": ["Open Sans Regular"],
+    "text-field": "{restriktionstekst}",
+    "text-size": 20,
+    "text-allow-overlap": true,
   },
 };
 
@@ -39,7 +67,7 @@ export function MapComponent() {
       queryKey: ["restrictions"],
       queryFn: async () =>
         await api.get("/parking/restrictions", {
-          params: { latitude: lat, longitude: lng },
+          params: { latitude: lat, longitude: lng, distance: 1.5 },
         }),
     },
   ]);
@@ -50,6 +78,8 @@ export function MapComponent() {
   const restrictions = results[1].data;
   console.log(restrictions);
 
+  if (isLoading)
+    return <Lottie options={defaultOptions} height={300} width={300} />;
   if (error) return <p>Error! {error}</p>;
 
   return (
@@ -63,9 +93,6 @@ export function MapComponent() {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
-      {isLoading && (
-        <Lottie options={defaultOptions} height={300} width={300} />
-      )}
       <GeolocateControl
         positionOptions={{
           enableHighAccuracy: true,
@@ -76,10 +103,20 @@ export function MapComponent() {
           dispatch(setLat(position.coords.latitude));
         }}
       />
+
       {!isLoading && zones.data && restrictions.data && (
         <>
           <Source id="zones" type="geojson" data={zones.data}>
-            <Layer {...layerStyle} />
+            <Layer {...zonesStyle} />
+          </Source>
+          <Source
+            id="restrictions"
+            key={"restrictions"}
+            type="geojson"
+            data={restrictions.data}
+          >
+            <Layer {...restrictionsStyle} />
+            <Layer {...restrictionsTextStyle} />
           </Source>
         </>
       )}

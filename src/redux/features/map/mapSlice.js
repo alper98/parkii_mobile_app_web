@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import api from "../../../api/ApiClient";
 
 export const mapSlice = createSlice({
   name: "map",
@@ -7,9 +6,8 @@ export const mapSlice = createSlice({
     error: null,
     lat: 55.676098,
     lng: 12.568337,
-    currentZone: null,
     address: null,
-    restrictions: [],
+    currentRestriction: null,
   },
   reducers: {
     setError: (state, action) => {
@@ -21,14 +19,11 @@ export const mapSlice = createSlice({
     setLng: (state, action) => {
       state.lng = action.payload;
     },
-    setCurrentZone: (state, action) => {
-      state.currentZone = action.payload;
-    },
     setAddress: (state, action) => {
       state.address = action.payload;
     },
-    setRestrictions: (state, action) => {
-      state.restrictions = action.payload;
+    setCurrentRestriction: (state, action) => {
+      state.currentRestriction = action.payload;
     },
   },
 });
@@ -39,7 +34,7 @@ export const {
   setLng,
   setCurrentZone,
   setAddress,
-  setRestrictions,
+  setCurrentRestriction,
   setError,
 } = mapSlice.actions;
 

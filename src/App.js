@@ -16,10 +16,12 @@ import Camera from "./pages/camera/Camera";
 import Login from "./pages/login/LoginContainer";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
-
+import { useQuery } from "react-query";
+import api from "./api/ApiClient";
+import { authSlice } from "./redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 const ProtectedRoute = ({ user, children }) => {
   if (!user) {
-    console.log(user);
     return <Navigate to="/login" replace />;
   }
   return children ? children : <Outlet />;
@@ -29,6 +31,8 @@ function App() {
   const user = useSelector((s) => s.auth.user);
   const height = use100vh();
   const realDeviceHeight = height ? height / 1.08 : "50vh";
+  const dispatch = useDispatch();
+
   return (
     <BrowserRouter>
       <Grid container direction="column">
