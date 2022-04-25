@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { login, register } from "../../redux/features/auth/authSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
-import { useNavigate } from "react-router-dom";
 
 export default function LoginContainer() {
   const [isLogIn, setIsLogIn] = useState(true);
+
   const user = useSelector((s) => s.auth.user);
 
   const dispatch = useDispatch();
@@ -31,7 +33,14 @@ export default function LoginContainer() {
   }, [user]);
 
   return (
-    <>
+    <Grid
+      container
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      height={"100%"}
+      paddingTop={10}
+    >
       {isLogIn ? (
         <LoginComponent
           handleLoginSignUp={handleLoginSignUp}
@@ -43,6 +52,6 @@ export default function LoginContainer() {
           handleSignUp={handleSignUp}
         />
       )}
-    </>
+    </Grid>
   );
 }

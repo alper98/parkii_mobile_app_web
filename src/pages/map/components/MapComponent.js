@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
+import Typography from "@mui/material/Typography";
 import Lottie from "react-lottie";
 import { useQueries } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,11 +77,20 @@ export function MapComponent() {
   const error = results.some((result) => result.error);
   const zones = results[0].data;
   const restrictions = results[1].data;
-  console.log(restrictions);
 
   if (isLoading)
-    return <Lottie options={defaultOptions} height={300} width={300} />;
-  if (error) return <p>Error! {error}</p>;
+    return (
+      <Typography variant="h4" textAlign={"center"}>
+        <Lottie options={defaultOptions} height={300} width={300} />
+        Initializing map...
+      </Typography>
+    );
+  if (error)
+    return (
+      <Typography variant="h4" textAlign={"center"}>
+        Error! {error}
+      </Typography>
+    );
 
   return (
     <Map

@@ -1,25 +1,15 @@
 import Grid from "@mui/material/Grid";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { use100vh } from "react-div-100vh";
-import { useSelector } from "react-redux";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  Outlet,
-} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import Camera from "./pages/camera/Camera";
 import Login from "./pages/login/LoginContainer";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
-import { useQuery } from "react-query";
-import api from "./api/ApiClient";
-import { authSlice } from "./redux/features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { checkToken } from "./redux/features/auth/authSlice";
+import { useEffect } from "react";
+
 const ProtectedRoute = ({ user, children }) => {
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -28,28 +18,28 @@ const ProtectedRoute = ({ user, children }) => {
 };
 
 function App() {
-  const user = useSelector((s) => s.auth.user);
-  const height = use100vh();
-  const realDeviceHeight = height ? height / 1.08 : "50vh";
   const dispatch = useDispatch();
+  const user = useSelector((s) => s.auth.user);
+
+  useEffect(() => {
+    dispatch(checkToken());
+  }, []);
 
   return (
-    <BrowserRouter>
-      <Grid container direction="column">
-        <NavbarComponent />
-        <div style={{ height: realDeviceHeight }}>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route element={<ProtectedRoute user={user} />}>
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/camera" element={<Camera />} />
-              <Route path="/map" element={<MapContainer />} />
-            </Route>
-          </Routes>
-        </div>
+    <Grid container direction="column">
+      <NavbarComponent />
+      <Grid style={{ height: "90vh" }}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/camera" element={<Camera />} />
+            <Route path="/map" element={<MapContainer />} />
+          </Route>
+        </Routes>
       </Grid>
-    </BrowserRouter>
+    </Grid>
   );
 }
 
