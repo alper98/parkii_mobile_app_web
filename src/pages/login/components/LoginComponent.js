@@ -48,7 +48,6 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               name="email"
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
-              autoFocus
             />
             <TextField
               margin="normal"

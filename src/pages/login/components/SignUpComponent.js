@@ -1,5 +1,3 @@
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -8,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 
 const theme = createTheme();
@@ -35,12 +32,6 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
           <Box
             component="form"
             noValidate
@@ -57,7 +48,6 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
                   onChange={(e) => setName(e.target.value)}
                   id="name"
                   label="Name"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>

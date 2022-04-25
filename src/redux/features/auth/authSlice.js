@@ -5,7 +5,6 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
   },
   reducers: {
     loginSuccess: (state, action) => {
@@ -14,41 +13,36 @@ export const authSlice = createSlice({
     logoutSuccess: (state) => {
       state.user = null;
     },
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
   },
 });
 
 export default authSlice.reducer;
 
 // Actions
-const { loginSuccess, logoutSuccess, setToken } = authSlice.actions;
+const { loginSuccess, logoutSuccess } = authSlice.actions;
 
 export const login = (email, password) => async (dispatch) => {
   try {
-    const response = await api.post("/api/login", {
+    const response = await api.post("/login", {
       email: email,
       password: password,
     });
     if (response) {
-      dispatch(setToken(response.data));
       localStorage.setItem("access_token", response.data.access_token);
-      console.log(response.data);
       dispatch(loginSuccess(response.data.user));
-      localStorage.setItem("user", response.data.access_token);
+      return true;
     } else {
       return false;
     }
   } catch (e) {
-    return console.error(e.message);
+    return console.log(e.message);
   }
 };
 
 export const register = (name, email, password) => async (dispatch) => {
   console.log(name, email, password);
   try {
-    const response = await api.post("/api/register", {
+    const response = await api.post("/register", {
       name: name,
       email: email,
       password: password,
@@ -68,6 +62,17 @@ export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem("access_token");
     return dispatch(logoutSuccess());
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+export const checkToken = () => async (dispatch) => {
+  try {
+    const response = await api.get("/user");
+    if (response.data.user) {
+      console.log(response.data.user);
+      loginSuccess(response.data.user);
+    }
   } catch (e) {
     return console.error(e.message);
   }
