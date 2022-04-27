@@ -3,10 +3,9 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/features/auth/authSlice";
+import UserContext from "../../userContext";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
@@ -14,9 +13,8 @@ import { UserMenuItems } from "./components/UserMenuItems";
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((s) => s.auth.user);
+  const [user, setUser] = useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,8 +32,10 @@ const NavbarComponent = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    setUser(null);
+    console.log(user);
     setAnchorElUser(null);
-    dispatch(logout());
   };
 
   const handleClickDesktopMenu = (path) => {

@@ -2,21 +2,15 @@ import { CardActionArea } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Geocode from "react-geocode";
-import { useDispatch, useSelector } from "react-redux";
-import { setAddress } from "../../../redux/features/map/mapSlice";
+const GOOGLE_API_KEY = "AIzaSyD-LIMt0ZLOGvNWiQM3pMcI0N2Sa7LNjJ4";
+Geocode.setApiKey(GOOGLE_API_KEY);
+Geocode.setLanguage("en");
+Geocode.setLocationType("ROOFTOP");
 
-export function AddressCard() {
-  const address = useSelector((s) => s.map.address);
-  const lat = useSelector((s) => s.map.lat);
-  const lng = useSelector((s) => s.map.lng);
-  const dispatch = useDispatch();
-
-  const GOOGLE_API_KEY = "AIzaSyD-LIMt0ZLOGvNWiQM3pMcI0N2Sa7LNjJ4";
-  Geocode.setApiKey(GOOGLE_API_KEY);
-  Geocode.setLanguage("en");
-  Geocode.setLocationType("ROOFTOP");
+export function AddressCard({ lat, lng }) {
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     Geocode.fromLatLng(lat, lng).then(
@@ -24,7 +18,7 @@ export function AddressCard() {
         let address = response.results[0].formatted_address;
         const index = address.lastIndexOf(",");
         address = address.slice(0, index);
-        dispatch(setAddress(address));
+        setAddress(address);
       },
       (error) => {
         console.error(error);

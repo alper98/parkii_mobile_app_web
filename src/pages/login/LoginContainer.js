@@ -1,36 +1,49 @@
 import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, register } from "../../redux/features/auth/authSlice";
+import { login, register } from "../../api/auth/authService";
+import UserContext from "../../userContext";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginContainer() {
   const [isLogIn, setIsLogIn] = useState(true);
+  const [user, setUser] = useContext(UserContext);
+  const [signUpMessage, setSignUpMessage] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
 
-  const user = useSelector((s) => s.auth.user);
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLoginSignUp = () => {
     setIsLogIn(!isLogIn);
+    setSignUpMessage(null);
+    setLoginMessage(null);
   };
 
-  const handleLogin = (email, password) => {
-    dispatch(login(email, password));
-  };
-
-  const handleSignUp = (name, email, password) => {
-    dispatch(register(name, email, password));
-  };
-
-  useEffect(() => {
-    if (user) {
-      navigate("/map");
+  const handleLogin = async (email, password) => {
+    try {
+      const user = await login(email, password);
+      setUser(user);
+    } catch (error) {
+      if (error.response.data) {
+        setLoginMessage("Wrong email or password");
+      }
     }
-  }, [user]);
+  };
+
+  const handleSignUp = async (name, email, password) => {
+    try {
+      await register(name, email, password);
+      setSignUpMessage("Created!");
+      setTimeout(() => {
+        handleLoginSignUp();
+      }, 1500);
+    } catch (error) {
+      if (error.response.data.errors.email) {
+        setSignUpMessage(error.response.data.errors.email);
+      }
+    }
+  };
 
   return (
     <Grid
@@ -45,11 +58,13 @@ export default function LoginContainer() {
         <LoginComponent
           handleLoginSignUp={handleLoginSignUp}
           handleLogin={handleLogin}
+          loginMessage={loginMessage}
         />
       ) : (
         <SignUpComponent
           handleLoginSignUp={handleLoginSignUp}
           handleSignUp={handleSignUp}
+          signUpMessage={signUpMessage}
         />
       )}
     </Grid>

@@ -10,7 +10,11 @@ import { useState } from "react";
 
 const theme = createTheme();
 
-export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
+export default function LoginComponent({
+  handleLoginSignUp,
+  handleLogin,
+  loginMessage,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,9 +34,14 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h4">
+            Log in
           </Typography>
+          {loginMessage && (
+            <Typography component="h1" variant="h6" textAlign={"center"}>
+              {loginMessage}
+            </Typography>
+          )}
           <Box
             component="form"
             onSubmit={handleClick}

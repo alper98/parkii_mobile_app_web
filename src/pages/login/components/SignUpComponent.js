@@ -11,14 +11,18 @@ import { useState } from "react";
 
 const theme = createTheme();
 
-export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
+export default function SignUpComponent({
+  handleLoginSignUp,
+  handleSignUp,
+  signUpMessage,
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleClick = (event) => {
     event.preventDefault();
-    handleSignUp(email, password);
+    handleSignUp(name, email, password);
   };
 
   return (
@@ -33,9 +37,16 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             Sign up
           </Typography>
+
+          {signUpMessage && (
+            <Typography component="h1" variant="h6" textAlign={"center"}>
+              {signUpMessage}
+            </Typography>
+          )}
+
           <Box
             component="form"
             noValidate
@@ -82,6 +93,7 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
               type="submit"
               fullWidth
               variant="contained"
+              onClick={handleClick}
               sx={{ mt: 3, mb: 2 }}
               disabled={!name || !email || !password}
             >
