@@ -38,7 +38,13 @@ export default function LoginContainer() {
           status: "error",
           message: "Wrong credentials",
         }));
+        return;
       }
+      setError((prev) => ({
+        error: !prev.error,
+        status: "error",
+        message: "Network error",
+      }));
     }
   };
 
@@ -60,7 +66,13 @@ export default function LoginContainer() {
           status: "error",
           message: error.response.data.errors.email,
         }));
+        return;
       }
+      setError((prev) => ({
+        error: !prev.error,
+        status: "error",
+        message: "Network error",
+      }));
     }
   };
 
