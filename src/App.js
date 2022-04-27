@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -7,8 +7,9 @@ import Camera from "./pages/camera/Camera";
 import Login from "./pages/login/LoginContainer";
 import MapContainer from "./pages/map/MapContainer";
 import Profile from "./pages/profile/Profile";
-import { checkToken } from "./redux/features/auth/authSlice";
+import UserContext from "./userContext";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProtectedRoute = ({ user, children }) => {
   if (!user) {
@@ -18,12 +19,16 @@ const ProtectedRoute = ({ user, children }) => {
 };
 
 function App() {
-  const dispatch = useDispatch();
-  const user = useSelector((s) => s.auth.user);
+  const [user] = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(checkToken());
-  }, []);
+    if (user) {
+      navigate("/map");
+    } else {
+      navigate("/login");
+    }
+  }, [user]);
 
   return (
     <Grid container direction="column">
