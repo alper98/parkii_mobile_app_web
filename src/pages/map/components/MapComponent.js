@@ -5,8 +5,8 @@ import { useState } from "react";
 import Lottie from "react-lottie";
 import { useQueries } from "react-query";
 import api from "../../../api/ApiClient";
-import * as spinner from "../../../lotties/spinner.json";
 import * as failure from "../../../lotties/failure.json";
+import * as spinner from "../../../lotties/spinner.json";
 import { AddressCard } from "./AddressCard";
 import {
   restrictionsStyle,
@@ -55,8 +55,8 @@ export function MapComponent() {
       <Typography variant="h5" textAlign={"center"}>
         <Lottie
           options={{ loop: true, autoplay: true, animationData: failure }}
-          height={250}
-          width={250}
+          height={150}
+          width={150}
         />
         Error loading the map - Contact kontakt@parkii.dk
       </Typography>

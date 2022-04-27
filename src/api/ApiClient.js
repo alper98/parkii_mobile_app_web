@@ -10,6 +10,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
+    credentials: "same-origin",
   },
 });
 api.interceptors.request.use(
