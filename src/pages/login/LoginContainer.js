@@ -1,32 +1,43 @@
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { login, register } from "../../api/auth/authService";
+import AlertComponent from "../../components/AlertComponent";
 import UserContext from "../../userContext";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginContainer() {
+  const [error, setError] = useState({
+    error: false,
+    status: null,
+    message: null,
+  });
+
   const [isLogIn, setIsLogIn] = useState(true);
   const [user, setUser] = useContext(UserContext);
-  const [signUpMessage, setSignUpMessage] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
-
-  const navigate = useNavigate();
 
   const handleLoginSignUp = () => {
     setIsLogIn(!isLogIn);
-    setSignUpMessage(null);
-    setLoginMessage(null);
   };
 
   const handleLogin = async (email, password) => {
     try {
       const user = await login(email, password);
-      setUser(user);
+      setError((prev) => ({
+        error: !prev.error,
+        status: "success",
+        message: "Logging in",
+      }));
+      setTimeout(() => {
+        setUser(user);
+      }, 1500);
     } catch (error) {
-      if (error.response.data) {
-        setLoginMessage("Wrong email or password");
+      if (error?.response?.data) {
+        setError((prev) => ({
+          error: !prev.error,
+          status: "error",
+          message: "Wrong credentials",
+        }));
       }
     }
   };
@@ -34,13 +45,21 @@ export default function LoginContainer() {
   const handleSignUp = async (name, email, password) => {
     try {
       await register(name, email, password);
-      setSignUpMessage("Created!");
+      setError((prev) => ({
+        error: !prev.error,
+        status: "success",
+        message: "Created - Redirecting to log in",
+      }));
       setTimeout(() => {
         handleLoginSignUp();
       }, 1500);
     } catch (error) {
-      if (error.response.data.errors.email) {
-        setSignUpMessage(error.response.data.errors.email);
+      if (error?.response?.data?.errors?.email) {
+        setError((prev) => ({
+          error: !prev.error,
+          status: "error",
+          message: error.response.data.errors.email,
+        }));
       }
     }
   };
@@ -54,17 +73,16 @@ export default function LoginContainer() {
       height={"100%"}
       paddingTop={10}
     >
+      {error && <AlertComponent setError={setError} error={error} />}
       {isLogIn ? (
         <LoginComponent
           handleLoginSignUp={handleLoginSignUp}
           handleLogin={handleLogin}
-          loginMessage={loginMessage}
         />
       ) : (
         <SignUpComponent
           handleLoginSignUp={handleLoginSignUp}
           handleSignUp={handleSignUp}
-          signUpMessage={signUpMessage}
         />
       )}
     </Grid>

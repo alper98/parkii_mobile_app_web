@@ -11,11 +11,7 @@ import { useState } from "react";
 
 const theme = createTheme();
 
-export default function SignUpComponent({
-  handleLoginSignUp,
-  handleSignUp,
-  signUpMessage,
-}) {
+export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,13 +36,6 @@ export default function SignUpComponent({
           <Typography component="h1" variant="h4">
             Sign up
           </Typography>
-
-          {signUpMessage && (
-            <Typography component="h1" variant="h6" textAlign={"center"}>
-              {signUpMessage}
-            </Typography>
-          )}
-
           <Box
             component="form"
             noValidate

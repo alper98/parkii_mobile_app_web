@@ -10,11 +10,7 @@ import { useState } from "react";
 
 const theme = createTheme();
 
-export default function LoginComponent({
-  handleLoginSignUp,
-  handleLogin,
-  loginMessage,
-}) {
+export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -37,11 +33,6 @@ export default function LoginComponent({
           <Typography component="h1" variant="h4">
             Log in
           </Typography>
-          {loginMessage && (
-            <Typography component="h1" variant="h6" textAlign={"center"}>
-              {loginMessage}
-            </Typography>
-          )}
           <Box
             component="form"
             onSubmit={handleClick}
