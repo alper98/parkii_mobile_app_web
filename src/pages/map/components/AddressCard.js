@@ -31,6 +31,7 @@ export function AddressCard({ lat, lng }) {
       className="mgl-map-overlay"
       sx={{
         minWidth: "100%",
+        minHeight: "10%",
       }}
     >
       <CardActionArea>

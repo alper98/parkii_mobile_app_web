@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Lottie from "react-lottie";
 import { useQueries } from "react-query";
 import api from "../../../api/ApiClient";
@@ -19,6 +19,13 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_KEY;
 export function MapComponent() {
   const [lat, setLat] = useState(55.676098);
   const [lng, setLng] = useState(12.568337);
+
+  const geolocateControlRef = useCallback((ref) => {
+    if (ref) {
+      // Activate as soon as the control is loaded
+      ref.trigger();
+    }
+  }, []);
 
   const results = useQueries([
     {
@@ -50,6 +57,7 @@ export function MapComponent() {
         Initializing map...
       </Typography>
     );
+
   if (error)
     return (
       <Typography variant="h5" textAlign={"center"}>
@@ -77,6 +85,7 @@ export function MapComponent() {
         positionOptions={{
           enableHighAccuracy: true,
         }}
+        ref={geolocateControlRef}
         trackUserLocation={true}
         onGeolocate={(position) => {
           setLng(position.coords.longitude);
