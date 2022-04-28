@@ -1,47 +1,40 @@
 import Grid from "@mui/material/Grid";
 import { useContext } from "react";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
-import Camera from "./pages/camera/Camera";
-import Login from "./pages/login/LoginContainer";
-import MapContainer from "./pages/map/MapContainer";
-import Profile from "./pages/profile/Profile";
+import CameraPage from "./pages/camera/CameraPage";
+import LoginPage from "./pages/login/LoginPage";
+import MapPage from "./pages/map/MapPage";
+import NotFoundPage from "./pages/notFound/NotFoundPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 import UserContext from "./userContext";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-const ProtectedRoute = ({ user, children }) => {
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  return children ? children : <Outlet />;
+const ProtectedRoute = () => {
+  const location = useLocation();
+  const [user] = useContext(UserContext);
+
+  return user ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 };
 
 function App() {
-  const [user] = useContext(UserContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/map");
-    } else {
-      navigate("/login");
-    }
-  }, [user]);
-
   return (
     <Grid container direction="column">
       <NavbarComponent />
       <Grid style={{ height: "90vh" }}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route element={<ProtectedRoute user={user} />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/camera" element={<Camera />} />
-            <Route path="/map" element={<MapContainer />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/camera" element={<CameraPage />} />
+            <Route path="/map" element={<MapPage />} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Grid>
     </Grid>

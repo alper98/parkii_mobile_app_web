@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const endpoint =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === "development"
     ? process.env.REACT_APP_PARKII_URL
     : "http://localhost:8000/api";
 

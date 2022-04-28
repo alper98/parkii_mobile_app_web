@@ -9,11 +9,11 @@ Geocode.setApiKey(GOOGLE_API_KEY);
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 
-export function AddressCard({ lat, lng }) {
+export function AddressCard({ viewState }) {
   const [address, setAddress] = useState("");
 
   useEffect(() => {
-    Geocode.fromLatLng(lat, lng).then(
+    Geocode.fromLatLng(viewState.latitude, viewState.longitude).then(
       (response) => {
         let address = response.results[0].formatted_address;
         const index = address.lastIndexOf(",");
@@ -24,7 +24,7 @@ export function AddressCard({ lat, lng }) {
         console.error(error);
       }
     );
-  }, [lat, lng]);
+  }, [viewState.latitude, viewState.longitude]);
 
   return (
     <Card

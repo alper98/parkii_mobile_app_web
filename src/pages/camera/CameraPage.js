@@ -2,12 +2,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import useWindowSize from "../../hooks/useWindowSize";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 import ImagePreview from "./components/ImagePreview";
 
-export default function Camera() {
+export default function CameraPage() {
   const webcamRef = useRef(null);
-  const windowSize = useWindowSize();
+  const { height, width } = useWindowDimensions();
   const [image, setImage] = useState("");
 
   const capture = useCallback(() => {
@@ -16,8 +16,8 @@ export default function Camera() {
   }, [webcamRef]);
 
   const videoConstraints = {
-    width: windowSize,
-    height: 700,
+    width: width,
+    height: height * 0.8,
     facingMode: "environment",
   };
 
@@ -26,11 +26,8 @@ export default function Camera() {
       {image === "" ? (
         <>
           <Webcam
-            width={videoConstraints.width}
-            height={videoConstraints.height}
-            mirrored
-            ref={webcamRef}
             audio={false}
+            ref={webcamRef}
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
           />
@@ -47,9 +44,7 @@ export default function Camera() {
           </Box>
         </>
       ) : (
-        <>
-          <ImagePreview image={image} setImage={setImage} />
-        </>
+        <ImagePreview image={image} setImage={setImage} />
       )}
     </div>
   );

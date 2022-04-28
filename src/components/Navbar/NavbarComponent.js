@@ -34,7 +34,6 @@ const NavbarComponent = () => {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     setUser(null);
-    console.log(user);
     setAnchorElUser(null);
   };
 

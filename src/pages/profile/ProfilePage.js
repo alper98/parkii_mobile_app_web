@@ -8,7 +8,7 @@ import { ProfileTextFields } from "./components/ProfileTextFields";
 
 const theme = createTheme();
 
-export default function Profile() {
+export default function ProfilePage() {
   const [user, setUser] = useContext(UserContext);
 
   return (

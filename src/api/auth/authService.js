@@ -1,4 +1,5 @@
 import api from "../ApiClient";
+import { useMutation } from "react-query";
 
 export const login = async (email, password) => {
   const response = await api.post("/login", {
@@ -25,13 +26,11 @@ export const register = async (name, email, password) => {
 export const isAuthenticated = async () => {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    return null;
+    return false;
   }
-
   const data = await api.get("/user");
-
   if (!data) {
-    return null;
+    return false;
   }
   return data.data.user;
 };

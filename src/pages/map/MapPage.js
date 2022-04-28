@@ -1,29 +1,35 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
 import Typography from "@mui/material/Typography";
-import { useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import Lottie from "react-lottie";
 import { useQueries } from "react-query";
-import api from "../../../api/ApiClient";
-import * as failure from "../../../lotties/failure.json";
-import * as spinner from "../../../lotties/spinner.json";
-import { AddressCard } from "./AddressCard";
+import api from "../../api/ApiClient";
+import * as failure from "../../lotties/failure.json";
+import * as spinner from "../../lotties/spinner.json";
+import { AddressCard } from "./components/AddressCard";
 import {
   restrictionsStyle,
   restrictionsTextStyle,
   zonesStyle,
-} from "./MapStyle";
+} from "./components/MapStyle";
 
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_KEY;
+export default function MapPage() {
+  const [viewState, setViewState] = useState({
+    longitude: -100,
+    latitude: 40,
+    zoom: 14,
+  });
 
-export function MapComponent() {
-  const [lat, setLat] = useState(55.676098);
-  const [lng, setLng] = useState(12.568337);
-
-  const geolocateControlRef = useCallback((ref) => {
-    if (ref) {
-      // Activate as soon as the control is loaded
-      ref.trigger();
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setViewState({
+          ...viewState,
+          longitude: pos.coords.longitude,
+          latitude: pos.coords.latitude,
+        });
+      });
     }
   }, []);
 
@@ -36,7 +42,11 @@ export function MapComponent() {
       queryKey: ["restrictions"],
       queryFn: async () =>
         await api.get("/parking/restrictions", {
-          params: { latitude: lat, longitude: lng, distance: 0.5 },
+          params: {
+            latitude: viewState.latitude,
+            longitude: viewState.longitude,
+            distance: 0.5,
+          },
         }),
     },
   ]);
@@ -72,27 +82,23 @@ export function MapComponent() {
 
   return (
     <Map
-      reuseMaps
-      initialViewState={{
-        latitude: lat,
-        longitude: lng,
-        zoom: 13,
-      }}
+      initialViewState={viewState}
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      mapboxAccessToken={MAPBOX_TOKEN}
+      mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
     >
       <GeolocateControl
         positionOptions={{
           enableHighAccuracy: true,
         }}
-        ref={geolocateControlRef}
         trackUserLocation={true}
-        onGeolocate={(position) => {
-          setLng(position.coords.longitude);
-          setLat(position.coords.latitude);
+        onGeolocate={(pos) => {
+          setViewState({
+            ...viewState,
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude,
+          });
         }}
       />
-
       {!isLoading && zones.data && restrictions.data && (
         <>
           <Source id="zones" type="geojson" data={zones.data}>
@@ -109,7 +115,7 @@ export function MapComponent() {
           </Source>
         </>
       )}
-      <AddressCard lat={lat} lng={lng} />
+      <AddressCard viewState={viewState} />
     </Map>
   );
 }
