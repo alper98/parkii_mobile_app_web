@@ -7,20 +7,40 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
+  const checkLoggedIn = async () => {
+    let cuser = await isAuthenticated();
+    if (!cuser) {
+      setUser(null);
+      navigate("/login");
+    }
+    setUser(cuser);
+  };
+
   useEffect(() => {
-    const checkLoggedIn = async () => {
-      let cuser = await isAuthenticated();
-      if (!cuser) {
-        localStorage.removeItem("access_token");
-        setUser(null);
-        navigate("/login");
-      }
-      setUser(cuser);
-    };
     checkLoggedIn();
   }, []);
+
+  useEffect(() => {
+    function listenForStorage() {
+      const item = localStorage.getItem("access_token");
+      if (item) {
+        checkLoggedIn();
+        setToken(item);
+      }
+    }
+
+    window.addEventListener("storage", listenForStorage);
+    return () => {
+      window.removeEventListener("storage", listenForStorage);
+    };
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("access_token", token);
+  }, [token]);
 
   return (
     <UserContext.Provider value={[user, setUser]}>

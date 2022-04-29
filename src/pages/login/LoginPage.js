@@ -20,39 +20,32 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (email, password) => {
-    try {
-      const user = await login(email, password);
+    const response = await login(email, password);
+    if (response.user) {
       setTypeOfAlert("success");
       setStatusMessage("Logging in");
       setTimeout(() => {
-        setUser(user);
-        navigate("/profile");
+        setUser(response.user);
+        navigate("/map");
       }, 1500);
-    } catch (error) {
+    } else {
       setTypeOfAlert("error");
-      if (error?.response?.data) {
-        setStatusMessage("Wrong credentials");
-      } else {
-        setStatusMessage("Network error");
-      }
+      setStatusMessage("Wrong credentials");
     }
   };
 
   const handleSignUp = async (name, email, password) => {
-    try {
-      await register(name, email, password);
+    const response = await register(name, email, password);
+    if (response.user) {
       setTypeOfAlert("success");
-      setStatusMessage("Created - Redirecting to log in");
+      setStatusMessage("Created - Logging in");
       setTimeout(() => {
-        handleLoginSignUp();
+        setUser(response.user);
+        navigate("/map");
       }, 1500);
-    } catch (error) {
+    } else {
       setTypeOfAlert("error");
-      if (error?.response?.data?.errors?.email) {
-        setStatusMessage(error.response.data.errors.email);
-      } else {
-        setStatusMessage("Network error");
-      }
+      setStatusMessage(response);
     }
   };
 

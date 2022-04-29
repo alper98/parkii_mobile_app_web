@@ -1,24 +1,37 @@
-import { useState } from "react";
-import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
-import "react-html5-camera-photo/build/css/index.css";
+import { useCallback, useRef, useState } from "react";
+import Webcam from "react-webcam";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import ImagePreview from "./components/ImagePreview";
+import { use100vh } from "react-div-100vh";
 
 export default function CameraPage() {
-  const { height, width } = useWindowDimensions();
+  const webcamRef = useRef(null);
+  const { width } = useWindowDimensions();
   const [image, setImage] = useState("");
+
+  const height = use100vh();
+  const halfHeight = height ? height * 0.9 : "90vh";
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImage(imageSrc);
+  }, [webcamRef]);
+
+  const videoConstraints = {
+    width: width,
+    height: halfHeight,
+    facingMode: "environment",
+  };
 
   return (
     <div className="webcamCapture">
       {image === "" ? (
         <>
-          <Camera
-            imageType={IMAGE_TYPES.JPG}
-            idealFacingMode={FACING_MODES.ENVIRONMENT}
-            idealResolution={{ width: width, height: height * 0.94 }}
-            onTakePhoto={(dataUri) => {
-              setImage(dataUri);
-            }}
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
           />
         </>
       ) : (

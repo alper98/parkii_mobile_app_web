@@ -1,36 +1,56 @@
 import api from "../ApiClient";
-import { useMutation } from "react-query";
 
 export const login = async (email, password) => {
-  const response = await api.post("/login", {
-    email,
-    password,
-  });
-  const token = response.data.access_token;
-  if (!token) {
-    return false;
+  try {
+    const response = await api.post("/login", {
+      email,
+      password,
+    });
+    const token = response.data.access_token;
+    if (!token) {
+      return false;
+    }
+    localStorage.setItem("access_token", token);
+    return { user: response.data.user };
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      console.log(error);
+    }
   }
-  localStorage.setItem("access_token", token);
-  return response.data.user;
 };
 
 export const register = async (name, email, password) => {
-  const response = await api.post("/register", {
-    name,
-    email,
-    password,
-  });
-  return response;
+  try {
+    const response = await api.post("/register", {
+      name,
+      email,
+      password,
+    });
+    localStorage.setItem("access_token", response.data.access_token);
+    const user = await isAuthenticated();
+    return { user: user };
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      console.log(error);
+    }
+  }
 };
 
 export const isAuthenticated = async () => {
-  const token = localStorage.getItem("access_token");
-  if (!token) {
+  if (!localStorage.getItem("access_token")) {
     return false;
   }
-  const data = await api.get("/user");
-  if (!data) {
+  try {
+    const response = await api.get("/user");
+    if (response.data.user) {
+      return response.data.user;
+    }
+  } catch (error) {
+    localStorage.removeItem("access_token");
     return false;
   }
-  return data.data.user;
 };

@@ -2,12 +2,6 @@
   height: 90vh;
 }
 
-.webcameCapture_button {
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
-
 .mgl-map-overlay {
   position: absolute;
   z-index: 1;

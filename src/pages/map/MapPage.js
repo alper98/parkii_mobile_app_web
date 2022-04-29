@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Map, { GeolocateControl, Layer, Source } from "!react-map-gl";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Lottie from "react-lottie";
+import Map, { GeolocateControl, Layer, Source } from "react-map-gl";
 import { useQueries } from "react-query";
 import api from "../../api/ApiClient";
 import * as failure from "../../lotties/failure.json";
@@ -15,20 +15,23 @@ import {
 } from "./components/MapStyle";
 
 export default function MapPage() {
+  const mapRef = useRef();
+  const geolocateControlRef = useRef();
+
   const [viewState, setViewState] = useState({
-    longitude: -100,
-    latitude: 40,
-    zoom: 14,
+    longitude: 12.568337,
+    latitude: 55.676098,
+    zoom: 16,
   });
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        setViewState({
-          ...viewState,
+        setViewState((state) => ({
+          ...state,
           longitude: pos.coords.longitude,
           latitude: pos.coords.latitude,
-        });
+        }));
       });
     }
   }, []);
@@ -82,23 +85,29 @@ export default function MapPage() {
 
   return (
     <Map
+      ref={mapRef}
+      onLoad={() => {
+        geolocateControlRef.current.trigger();
+      }}
       initialViewState={viewState}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
     >
       <GeolocateControl
+        ref={geolocateControlRef}
         positionOptions={{
           enableHighAccuracy: true,
         }}
         trackUserLocation={true}
         onGeolocate={(pos) => {
-          setViewState({
-            ...viewState,
+          setViewState((state) => ({
+            ...state,
             longitude: pos.coords.longitude,
             latitude: pos.coords.latitude,
-          });
+          }));
         }}
       />
+
       {!isLoading && zones.data && restrictions.data && (
         <>
           <Source id="zones" type="geojson" data={zones.data}>
