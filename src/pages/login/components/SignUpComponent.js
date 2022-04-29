@@ -1,30 +1,42 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { validationSchema } from "../Util/validationSchema";
+import { Helmet } from "react-helmet";
 
 const theme = createTheme();
 
 export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    handleSignUp(name, email, password);
+  const handleClick = (data) => {
+    delete data.confirmPassword;
+    handleSignUp(data);
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Sign up - Parkii.dk</title>
+      </Helmet>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
@@ -38,60 +50,71 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
           </Typography>
           <Box
             component="form"
+            onSubmit={handleClick}
             noValidate
-            onSubmit={handleSignUp}
-            sx={{ mt: 3 }}
+            sx={{ mt: 1 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  onChange={(e) => setName(e.target.value)}
-                  id="name"
-                  label="Name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
+            <TextField
+              required
+              id="name"
+              name="name"
+              label="Full Name"
+              fullWidth
+              margin="normal"
+              {...register("name")}
+              error={errors.name ? true : false}
+              helperText={errors.name?.message}
+            />
+            <TextField
+              required
+              id="email"
+              name="email"
+              label="Email"
+              fullWidth
+              margin="normal"
+              {...register("email")}
+              error={errors.email ? true : false}
+              helperText={errors.email?.message}
+            />
+            <TextField
+              required
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              value={12345678}
+              fullWidth
+              margin="normal"
+              {...register("password")}
+              error={errors.password ? true : false}
+              helperText={errors.password?.message}
+            />
+            <TextField
+              required
+              value={12345678}
+              id="confirmPassword"
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              fullWidth
+              margin="normal"
+              {...register("confirmPassword")}
+              error={errors.confirmPassword ? true : false}
+              helperText={errors.confirmPassword?.message}
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              onClick={handleClick}
               sx={{ mt: 3, mb: 2 }}
-              disabled={!name || !email || !password}
+              onClick={handleSubmit(handleClick)}
             >
-              Sign Up
+              Register
             </Button>
-            <Grid container justifyContent="flex-start">
+            <Grid container>
               <Grid item onClick={() => handleLoginSignUp()}>
                 <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                  Already signed up? Log in here
                 </Link>
               </Grid>
             </Grid>

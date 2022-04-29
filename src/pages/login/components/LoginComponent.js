@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const theme = createTheme();
 
@@ -21,6 +22,10 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Login - Parkii.dk</title>
+      </Helmet>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

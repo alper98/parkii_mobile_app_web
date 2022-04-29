@@ -1,65 +1,119 @@
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Box, Button, Container, TextField } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import diff from "object-diff";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import UserContext from "../../../userContext";
+import { validationSchema } from "../util/ProfileUtils";
+import userService from "../../../api/userService";
 
-export function ProfileTextFields({ user }) {
+const theme = createTheme();
+
+export default function ProfileTextFields() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const [user, setUser] = useContext(UserContext);
+
+  const handleClick = async (data) => {
+    const formBody = diff(user, data);
+    if (Object.keys(formBody).length === 0) {
+      toast.info("No changes have been made");
+      return;
+    }
+    const response = await userService.update(user.id, formBody);
+    if (response.user) {
+      toast.success(response.message);
+      setUser(response.user);
+    } else if (response.error) {
+      toast.error(response.error);
+    } else {
+      toast.error("Network error");
+    }
+  };
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <TextField
-          value={user.name}
-          autoComplete="given-name"
-          name="name"
-          fullWidth
-          id="name"
-          label="Name"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          value={user.email}
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          value={user.phone}
-          fullWidth
-          name="phone"
-          label="Phone"
-          placeholder="Enter phone"
-          type="tel"
-          id="phone"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          value={user.car}
-          fullWidth
-          name="car"
-          label="Car"
-          type="text"
-          id="car"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        {user.email_verified_at ? (
-          <>
-            Email is not verified
-            <CheckIcon fontSize="large" color="success" />
-          </>
-        ) : (
-          <>
-            Email is not verified
-            <ClearIcon fontSize="large" color="warning" />
-          </>
-        )}
-      </Grid>
-    </Grid>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Box onSubmit={handleClick} noValidate sx={{ mt: 1 }}>
+            <TextField
+              defaultValue={user.name ? user.name : ""}
+              id="name"
+              name="name"
+              label="Full Name"
+              fullWidth
+              margin="normal"
+              {...register("name")}
+              error={errors.name ? true : false}
+              helperText={errors.name?.message}
+            />
+            <TextField
+              defaultValue={user.email ? user.email : ""}
+              id="email"
+              name="email"
+              label="Email"
+              fullWidth
+              margin="normal"
+              {...register("email")}
+              error={errors.email ? true : false}
+              helperText={errors.email?.message}
+            />
+            <TextField
+              defaultValue={user.phone ? user.phone : ""}
+              id="phone"
+              name="phone"
+              label="Phone"
+              fullWidth
+              margin="normal"
+              {...register("phone")}
+              error={errors.phone ? true : false}
+              helperText={errors.phone?.message}
+            />
+            <TextField
+              defaultValue={user.license_plate ? user.license_plate : ""}
+              id="license_plate"
+              name="license_plate"
+              label="License Plate"
+              fullWidth
+              margin="normal"
+              {...register("license_plate")}
+              error={errors.license_plate ? true : false}
+              helperText={errors.license_plate?.message}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit(handleClick)}
+            >
+              Save changes
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+      <ToastContainer
+        limit={1}
+        position={"top-right"}
+        autoClose={1500}
+        hideProgressBar={false}
+        closeOnClick={true}
+      />
+    </ThemeProvider>
   );
 }
