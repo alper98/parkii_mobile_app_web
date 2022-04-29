@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Grid";
 import { useContext } from "react";
+import { use100vh } from "react-div-100vh";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -22,10 +23,12 @@ const ProtectedRoute = () => {
 };
 
 function App() {
+  const height = use100vh();
+  const halfHeight = height ? height * 0.9 : "90vh";
   return (
     <Grid container direction="column">
       <NavbarComponent />
-      <Grid style={{ height: "90vh" }}>
+      <Grid style={{ height: halfHeight }}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Navigate to="/login" />} />
