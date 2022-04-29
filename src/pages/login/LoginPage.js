@@ -1,17 +1,15 @@
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, register } from "../../api/auth/authService";
-import AlertComponent from "../../components/AlertComponent";
+import { toast, ToastContainer } from "react-toastify";
+import AuthService from "../../api/authService";
+import UserService from "../../api/userService";
 import UserContext from "../../userContext";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginPage() {
-  const [statusMessage, setStatusMessage] = useState("");
-  const [typeOfAlert, setTypeOfAlert] = useState("");
   const [isLogIn, setIsLogIn] = useState(true);
-
   const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -20,32 +18,28 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (email, password) => {
-    const response = await login(email, password);
+    const response = await AuthService.login(email, password);
     if (response.user) {
-      setTypeOfAlert("success");
-      setStatusMessage("Logging in");
+      toast.success(`Loggin in...`);
       setTimeout(() => {
         setUser(response.user);
-        navigate("/map");
+        navigate("/profile");
       }, 1500);
     } else {
-      setTypeOfAlert("error");
-      setStatusMessage("Wrong credentials");
+      toast.error("Wrong credentials");
     }
   };
 
-  const handleSignUp = async (name, email, password) => {
-    const response = await register(name, email, password);
-    if (response.user) {
-      setTypeOfAlert("success");
-      setStatusMessage("Created - Logging in");
+  const handleSignUp = async (data) => {
+    const response = await UserService.create(data);
+    if (response.access_token) {
+      const getUserResponse = await UserService.get();
+      toast.success(`${getUserResponse.user.name} created!`);
       setTimeout(() => {
-        setUser(response.user);
-        navigate("/map");
-      }, 1500);
-    } else {
-      setTypeOfAlert("error");
-      setStatusMessage(response);
+        setUser(getUserResponse.user);
+      }, 2300);
+    } else if (response.error) {
+      toast.error(response.error);
     }
   };
 
@@ -58,9 +52,6 @@ export default function LoginPage() {
       height={"100%"}
       paddingTop={10}
     >
-      {typeOfAlert && (
-        <AlertComponent typeOfAlert={typeOfAlert} message={statusMessage} />
-      )}
       {isLogIn ? (
         <LoginComponent
           handleLoginSignUp={handleLoginSignUp}
@@ -72,6 +63,13 @@ export default function LoginPage() {
           handleSignUp={handleSignUp}
         />
       )}
+      <ToastContainer
+        limit={1}
+        position={"top-right"}
+        autoClose={1500}
+        hideProgressBar={false}
+        closeOnClick={true}
+      />
     </Grid>
   );
 }

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { use100vh } from "react-div-100vh";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
@@ -10,6 +10,7 @@ import MapPage from "./pages/map/MapPage";
 import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import UserContext from "./userContext";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -31,13 +32,13 @@ function App() {
       <NavbarComponent />
       <Grid style={{ height: halfHeight }}>
         <Routes>
+          <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<ProtectedRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/camera" element={<CameraPage />} />
             <Route path="/map" element={<MapPage />} />
           </Route>
-          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Grid>
     </Grid>

@@ -13,6 +13,7 @@ import {
   restrictionsTextStyle,
   zonesStyle,
 } from "./components/MapStyle";
+import { Helmet } from "react-helmet";
 
 export default function MapPage() {
   const mapRef = useRef();
@@ -84,47 +85,53 @@ export default function MapPage() {
     );
 
   return (
-    <Map
-      ref={mapRef}
-      onLoad={() => {
-        geolocateControlRef.current.trigger();
-      }}
-      initialViewState={viewState}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-      mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
-    >
-      <GeolocateControl
-        ref={geolocateControlRef}
-        positionOptions={{
-          enableHighAccuracy: true,
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Map - Parkii.dk</title>
+      </Helmet>
+      <Map
+        ref={mapRef}
+        onLoad={() => {
+          geolocateControlRef.current.trigger();
         }}
-        trackUserLocation={true}
-        onGeolocate={(pos) => {
-          setViewState((state) => ({
-            ...state,
-            longitude: pos.coords.longitude,
-            latitude: pos.coords.latitude,
-          }));
-        }}
-      />
+        initialViewState={viewState}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
+      >
+        <GeolocateControl
+          ref={geolocateControlRef}
+          positionOptions={{
+            enableHighAccuracy: true,
+          }}
+          trackUserLocation={true}
+          onGeolocate={(pos) => {
+            setViewState((state) => ({
+              ...state,
+              longitude: pos.coords.longitude,
+              latitude: pos.coords.latitude,
+            }));
+          }}
+        />
 
-      {!isLoading && zones.data && restrictions.data && (
-        <>
-          <Source id="zones" type="geojson" data={zones.data}>
-            <Layer {...zonesStyle} />
-          </Source>
-          <Source
-            id="restrictions"
-            key={"restrictions"}
-            type="geojson"
-            data={restrictions.data}
-          >
-            <Layer {...restrictionsStyle} />
-            <Layer {...restrictionsTextStyle} />
-          </Source>
-        </>
-      )}
-      <AddressCard viewState={viewState} />
-    </Map>
+        {!isLoading && zones.data && restrictions.data && (
+          <>
+            <Source id="zones" type="geojson" data={zones.data}>
+              <Layer {...zonesStyle} />
+            </Source>
+            <Source
+              id="restrictions"
+              key={"restrictions"}
+              type="geojson"
+              data={restrictions.data}
+            >
+              <Layer {...restrictionsStyle} />
+              <Layer {...restrictionsTextStyle} />
+            </Source>
+          </>
+        )}
+        <AddressCard viewState={viewState} />
+      </Map>
+    </>
   );
 }
