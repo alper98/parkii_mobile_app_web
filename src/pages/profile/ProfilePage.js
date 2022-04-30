@@ -4,6 +4,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
+import { toast, ToastContainer } from "react-toastify";
+import userService from "../../api/userService";
 import UserContext from "../../userContext";
 import ProfileTextFields from "./components/ProfileTextFields";
 
@@ -11,6 +13,23 @@ const theme = createTheme();
 
 export default function ProfilePage() {
   const [user, setUser] = useContext(UserContext);
+
+  const handleUpdate = async (data) => {
+    const response = await userService.update(user.id, data);
+    if (response.user) {
+      toast.success(response.message, {
+        toastId: "success",
+      });
+      setUser(response.user);
+    } else if (response.error) {
+      toast.error(response.error, { toastId: "error" });
+    } else {
+      toast.error("Network error", {
+        toastId: "error",
+      });
+    }
+    toast.clearWaitingQueue();
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -29,10 +48,17 @@ export default function ProfilePage() {
           }}
         >
           <Box component="form" noValidate sx={{ mt: 3 }}>
-            <ProfileTextFields />
+            <ProfileTextFields handleUpdate={handleUpdate} />
           </Box>
         </Box>
       </Container>
+      <ToastContainer
+        limit={1}
+        position={"top-right"}
+        autoClose={1500}
+        hideProgressBar={false}
+        closeOnClick={true}
+      />
     </ThemeProvider>
   );
 }

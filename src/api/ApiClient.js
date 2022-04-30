@@ -6,7 +6,7 @@ const endpoint =
     : "http://localhost:8000/api";
 
 const api = axios.create({
-  baseURL: endpoint,
+  baseURL: process.env.REACT_APP_PARKII_URL,
   headers: {},
 });
 api.interceptors.request.use(

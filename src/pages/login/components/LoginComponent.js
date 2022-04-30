@@ -11,7 +11,11 @@ import { Helmet } from "react-helmet";
 
 const theme = createTheme();
 
-export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
+export default function LoginComponent({
+  handleLoginSignUp,
+  handleLogin,
+  isSubmitting,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -70,7 +74,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!email || !password}
+              disabled={!email || !password || isSubmitting}
             >
               Sign In
             </Button>

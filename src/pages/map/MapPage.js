@@ -1,23 +1,22 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Typography from "@mui/material/Typography";
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import Lottie from "react-lottie";
-import Map, { GeolocateControl, Layer, Source } from "react-map-gl";
-import { useQueries } from "react-query";
-import api from "../../api/ApiClient";
+import Map, { GeolocateControl } from "react-map-gl";
+import mapService from "../../api/mapService";
 import * as failure from "../../lotties/failure.json";
 import * as spinner from "../../lotties/spinner.json";
 import { AddressCard } from "./components/AddressCard";
-import {
-  restrictionsStyle,
-  restrictionsTextStyle,
-  zonesStyle,
-} from "./components/MapStyle";
-import { Helmet } from "react-helmet";
+import { MapLayer } from "./components/MapLayer";
 
 export default function MapPage() {
   const mapRef = useRef();
   const geolocateControlRef = useRef();
+  const [zones, setZones] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [restrictions, setRestrictions] = useState();
 
   const [viewState, setViewState] = useState({
     longitude: 12.568337,
@@ -25,40 +24,54 @@ export default function MapPage() {
     zoom: 16,
   });
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        setViewState((state) => ({
-          ...state,
-          longitude: pos.coords.longitude,
-          latitude: pos.coords.latitude,
-        }));
-      });
+  const fetchRestrictions = async () => {
+    const response = await mapService.getRestrictions(
+      viewState.latitude,
+      viewState.longitude
+    );
+    if (response.restrictions) {
+      return response.restrictions;
+    } else {
+      setError(true);
     }
+  };
+  const fetchZones = async () => {
+    const response = await mapService.getZones();
+    if (response.zones) {
+      return response.zones;
+    } else {
+      setError(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log("først gang");
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setViewState((state) => ({
+        ...state,
+        longitude: pos.coords.longitude,
+        latitude: pos.coords.latitude,
+      }));
+    });
+    async function getZones() {
+      setIsLoading(true);
+      const zoneData = await fetchZones();
+      setZones(zoneData);
+      setIsLoading(false);
+    }
+    getZones();
   }, []);
 
-  const results = useQueries([
-    {
-      queryKey: ["zones"],
-      queryFn: async () => await api.get("/parking/zones"),
-    },
-    {
-      queryKey: ["restrictions"],
-      queryFn: async () =>
-        await api.get("/parking/restrictions", {
-          params: {
-            latitude: viewState.latitude,
-            longitude: viewState.longitude,
-            distance: 0.5,
-          },
-        }),
-    },
-  ]);
-
-  const isLoading = results.some((result) => result.isLoading);
-  const error = results.some((result) => result.error);
-  const zones = results[0].data;
-  const restrictions = results[1].data;
+  useEffect(() => {
+    console.log("view ændring");
+    async function getRestrictions() {
+      setIsLoading(true);
+      const restrictionData = await fetchRestrictions();
+      setRestrictions(restrictionData);
+      setIsLoading(false);
+    }
+    getRestrictions();
+  }, []);
 
   if (isLoading)
     return (
@@ -90,6 +103,9 @@ export default function MapPage() {
         <meta charSet="utf-8" />
         <title>Map - Parkii.dk</title>
       </Helmet>
+      <p>TESTER</p>
+      <p>Latitude: {viewState.latitude}</p>
+      <p>Longitude: {viewState.longitude}</p>
       <Map
         ref={mapRef}
         onLoad={() => {
@@ -114,21 +130,8 @@ export default function MapPage() {
           }}
         />
 
-        {!isLoading && zones.data && restrictions.data && (
-          <>
-            <Source id="zones" type="geojson" data={zones.data}>
-              <Layer {...zonesStyle} />
-            </Source>
-            <Source
-              id="restrictions"
-              key={"restrictions"}
-              type="geojson"
-              data={restrictions.data}
-            >
-              <Layer {...restrictionsStyle} />
-              <Layer {...restrictionsTextStyle} />
-            </Source>
-          </>
+        {!isLoading && zones && restrictions && (
+          <MapLayer zones={zones} restrictions={restrictions} />
         )}
         <AddressCard viewState={viewState} />
       </Map>

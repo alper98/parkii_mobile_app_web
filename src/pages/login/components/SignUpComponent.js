@@ -16,7 +16,11 @@ import { Helmet } from "react-helmet";
 
 const theme = createTheme();
 
-export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
+export default function SignUpComponent({
+  handleLoginSignUp,
+  handleSignUp,
+  isSubmitting,
+}) {
   const {
     register,
     handleSubmit,
@@ -108,6 +112,7 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSubmit(handleClick)}
+              disabled={isSubmitting}
             >
               Register
             </Button>

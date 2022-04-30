@@ -2,16 +2,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Container, TextField } from "@material-ui/core";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import diff from "object-diff";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import UserContext from "../../../userContext";
 import { validationSchema } from "../util/ProfileUtils";
-import userService from "../../../api/userService";
 
 const theme = createTheme();
 
-export default function ProfileTextFields() {
+export default function ProfileTextFields({ handleUpdate }) {
   const {
     register,
     handleSubmit,
@@ -22,21 +21,21 @@ export default function ProfileTextFields() {
 
   const [user, setUser] = useContext(UserContext);
 
-  const handleClick = async (data) => {
+  const handleClick = (data) => {
+    for (const key in data) {
+      if (data[key] === "") {
+        delete data[key];
+      }
+    }
     const formBody = diff(user, data);
     if (Object.keys(formBody).length === 0) {
-      toast.info("No changes have been made");
+      toast.info("No changes have been made", {
+        toastId: "noChanges",
+      });
+      toast.clearWaitingQueue();
       return;
     }
-    const response = await userService.update(user.id, formBody);
-    if (response.user) {
-      toast.success(response.message);
-      setUser(response.user);
-    } else if (response.error) {
-      toast.error(response.error);
-    } else {
-      toast.error("Network error");
-    }
+    handleUpdate(formBody);
   };
 
   return (
@@ -74,7 +73,7 @@ export default function ProfileTextFields() {
               helperText={errors.email?.message}
             />
             <TextField
-              defaultValue={user.phone ? user.phone : ""}
+              defaultValue={user.phone ? user.phone : null}
               id="phone"
               name="phone"
               label="Phone"
@@ -85,7 +84,7 @@ export default function ProfileTextFields() {
               helperText={errors.phone?.message}
             />
             <TextField
-              defaultValue={user.license_plate ? user.license_plate : ""}
+              defaultValue={user.license_plate ? user.license_plate : null}
               id="license_plate"
               name="license_plate"
               label="License Plate"
@@ -107,13 +106,6 @@ export default function ProfileTextFields() {
           </Box>
         </Box>
       </Container>
-      <ToastContainer
-        limit={1}
-        position={"top-right"}
-        autoClose={1500}
-        hideProgressBar={false}
-        closeOnClick={true}
-      />
     </ThemeProvider>
   );
 }
