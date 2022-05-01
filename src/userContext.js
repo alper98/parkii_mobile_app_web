@@ -17,7 +17,6 @@ export const UserProvider = ({ children }) => {
       toast.error("Expired or invalid session - Log in again");
       navigate("/login");
     } else if (cuser) {
-      console.log("test");
       toast.info("Session restored");
       toast.clearWaitingQueue();
       setUser(cuser);
@@ -50,7 +49,8 @@ export const UserProvider = ({ children }) => {
         position={"top-right"}
         autoClose={750}
         hideProgressBar={false}
-        closeOnClick={true}
+        pauseOnFocusLoss={false}
+        closeOnClick
       />
     </UserContext.Provider>
   );

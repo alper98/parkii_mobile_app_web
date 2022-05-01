@@ -10,7 +10,6 @@ import MapPage from "./pages/map/MapPage";
 import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import UserContext from "./userContext";
-import "react-toastify/dist/ReactToastify.css";
 
 const ProtectedRoute = () => {
   const location = useLocation();

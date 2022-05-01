@@ -8,6 +8,18 @@ export const zonesStyle = {
   },
 };
 
+export const zonesTextStyle = {
+  id: "symbols",
+  type: "symbol",
+  source: "zones",
+  layout: {
+    "text-field": ["get", "beskrivelse"],
+    "text-variable-anchor": ["top", "bottom", "left", "right"],
+    "text-radial-offset": 0.5,
+    "text-justify": "auto",
+  },
+};
+
 export const restrictionsStyle = {
   id: "lineLayer",
   type: "line",

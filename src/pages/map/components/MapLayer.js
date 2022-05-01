@@ -3,6 +3,7 @@ import {
   restrictionsStyle,
   restrictionsTextStyle,
   zonesStyle,
+  zonesTextStyle,
 } from "./MapStyle";
 
 export function MapLayer({ zones, restrictions }) {
@@ -10,6 +11,7 @@ export function MapLayer({ zones, restrictions }) {
     <>
       <Source id="zones" type="geojson" data={zones}>
         <Layer {...zonesStyle} />
+        <Layer {...zonesTextStyle} />
       </Source>
       <Source
         id="restrictions"
