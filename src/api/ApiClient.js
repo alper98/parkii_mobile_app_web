@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const endpoint =
   process.env.NODE_ENV === "production"
@@ -6,7 +7,7 @@ const endpoint =
     : "http://localhost:8000/api";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_PARKII_URL,
+  baseURL: endpoint,
   headers: {},
 });
 api.interceptors.request.use(
@@ -17,6 +18,10 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    toast.error("Error");
+    Promise.reject(error);
+  }
 );
+
 export default api;

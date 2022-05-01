@@ -1,4 +1,5 @@
 import api from "./ApiClient";
+import { toast } from "react-toastify";
 
 class UserService {
   get = async () => {
@@ -14,36 +15,53 @@ class UserService {
     }
   };
   create = async (data) => {
-    try {
-      const response = await api.post("/register", data);
-      if (response.data.access_token) {
-        localStorage.setItem("access_token", response.data.access_token);
-        return { access_token: response.data.access_token };
-      }
-    } catch (error) {
-      if (error.response) {
-        return { error: error.response.data.message };
-      } else {
-        console.log(error);
-      }
+    const response = await toast.promise(api.post("/register", data), {
+      pending: "Creating user...",
+      success: `${data.name} has been created!`,
+      error: {
+        render({ data }) {
+          return data.response.data.message;
+        },
+      },
+    });
+    if (response.data.access_token) {
+      localStorage.setItem("access_token", response.data.access_token);
+      return { access_token: response.data.access_token };
     }
   };
+
   update = async (id, data) => {
-    try {
-      const response = await api.put(`/users/${id}`, data);
-      if (response.data.user) {
-        return { user: response.data.user, message: response.data.message };
-      }
-    } catch (error) {
-      if (error.response) {
-        return { error: error.response.data.message };
-      } else {
-        console.log(error);
-      }
+    const response = await toast.promise(api.put(`/users/${id}`, data), {
+      pending: "Updating profile...",
+      success: `Updated profile!`,
+      error: {
+        render({ data }) {
+          return data.response.data.message;
+        },
+      },
+    });
+    if (response.data.user) {
+      return { user: response.data.user };
     }
   };
+
   delete = async (id) => {
-    return api.delete(`/users/${id}`);
+    const response = await toast.promise(api.delete(`/users/${id}`), {
+      pending: "Deleting profile...",
+      success: {
+        render({ data }) {
+          return data.data.message;
+        },
+      },
+      error: {
+        render({ data }) {
+          return data.response.data.message;
+        },
+      },
+    });
+    if (response) {
+      return true;
+    }
   };
 }
 export default new UserService();

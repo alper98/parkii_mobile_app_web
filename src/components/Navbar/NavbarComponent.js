@@ -9,7 +9,7 @@ import UserContext from "../../userContext";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
-
+import { toast } from "react-toastify";
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -35,6 +35,7 @@ const NavbarComponent = () => {
     localStorage.removeItem("access_token");
     setUser(null);
     setAnchorElUser(null);
+    toast.info("Logged out");
   };
 
   const handleClickDesktopMenu = (path) => {
