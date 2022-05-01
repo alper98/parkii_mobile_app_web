@@ -1,7 +1,7 @@
 import api from "./ApiClient";
 
 class MapService {
-  getRestrictions = async (latitude, longitude, distance = 0.5) => {
+  getRestrictions = async (latitude, longitude, distance = 1) => {
     try {
       const response = await api.get("/parking/restrictions", {
         params: {

@@ -24,11 +24,8 @@ export default function MapPage() {
     zoom: 16,
   });
 
-  const fetchRestrictions = async () => {
-    const response = await mapService.getRestrictions(
-      viewState.latitude,
-      viewState.longitude
-    );
+  const fetchRestrictions = async (latitude, longitude) => {
+    const response = await mapService.getRestrictions(latitude, longitude);
     if (response.restrictions) {
       return response.restrictions;
     } else {
@@ -45,30 +42,28 @@ export default function MapPage() {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setViewState((state) => ({
-        ...state,
-        longitude: pos.coords.longitude,
-        latitude: pos.coords.latitude,
-      }));
-    });
     async function getZones() {
       setIsLoading(true);
       const zoneData = await fetchZones();
       setZones(zoneData);
       setIsLoading(false);
     }
-    getZones();
-  }, []);
-
-  useEffect(() => {
-    async function getRestrictions() {
+    async function getRestrictions(latitude, longitude) {
       setIsLoading(true);
-      const restrictionData = await fetchRestrictions();
+      const restrictionData = await fetchRestrictions(latitude, longitude);
       setRestrictions(restrictionData);
       setIsLoading(false);
     }
-    getRestrictions();
+
+    navigator.geolocation.getCurrentPosition((pos) => {
+      getZones();
+      getRestrictions(pos.coords.latitude, pos.coords.longitude);
+      setViewState((state) => ({
+        ...state,
+        longitude: pos.coords.longitude,
+        latitude: pos.coords.latitude,
+      }));
+    });
   }, []);
 
   if (isLoading)
