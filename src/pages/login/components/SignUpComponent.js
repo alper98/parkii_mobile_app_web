@@ -8,19 +8,12 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "../Util/validationSchema";
-import { Helmet } from "react-helmet";
 
-const theme = createTheme();
-
-export default function SignUpComponent({
-  handleLoginSignUp,
-  handleSignUp,
-  isSubmitting,
-}) {
+export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
   const {
     register,
     handleSubmit,
@@ -35,7 +28,7 @@ export default function SignUpComponent({
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Sign up - Parkii.dk</title>
@@ -112,7 +105,6 @@ export default function SignUpComponent({
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSubmit(handleClick)}
-              disabled={isSubmitting}
             >
               Register
             </Button>
@@ -126,6 +118,6 @@ export default function SignUpComponent({
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

@@ -3,19 +3,12 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 
-const theme = createTheme();
-
-export default function LoginComponent({
-  handleLoginSignUp,
-  handleLogin,
-  isSubmitting,
-}) {
+export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,7 +18,7 @@ export default function LoginComponent({
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Login - Parkii.dk</title>
@@ -74,7 +67,7 @@ export default function LoginComponent({
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!email || !password || isSubmitting}
+              disabled={!email || !password}
             >
               Sign In
             </Button>
@@ -88,6 +81,6 @@ export default function LoginComponent({
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

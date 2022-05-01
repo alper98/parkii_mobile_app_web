@@ -45,7 +45,6 @@ export default function MapPage() {
   };
 
   useEffect(() => {
-    console.log("først gang");
     navigator.geolocation.getCurrentPosition((pos) => {
       setViewState((state) => ({
         ...state,
@@ -63,7 +62,6 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
-    console.log("view ændring");
     async function getRestrictions() {
       setIsLoading(true);
       const restrictionData = await fetchRestrictions();
@@ -103,9 +101,6 @@ export default function MapPage() {
         <meta charSet="utf-8" />
         <title>Map - Parkii.dk</title>
       </Helmet>
-      <p>TESTER</p>
-      <p>Latitude: {viewState.latitude}</p>
-      <p>Longitude: {viewState.longitude}</p>
       <Map
         ref={mapRef}
         onLoad={() => {

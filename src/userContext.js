@@ -8,17 +8,20 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
-  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
   const checkLoggedIn = async () => {
     let cuser = await authService.isTokenValid();
     if (cuser.error) {
       setUser(null);
+      toast.error("Expired or invalid session - Log in again");
       navigate("/login");
-      toast.error("Session expired - Log in again");
     } else if (cuser) {
+      console.log("test");
+      toast.info("Session restored");
+      toast.clearWaitingQueue();
       setUser(cuser);
+      return;
     }
   };
 
@@ -28,13 +31,11 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     function listenForStorage() {
-      const item = localStorage.getItem("access_token");
-      if (item) {
+      const token = localStorage.getItem("access_token");
+      if (token) {
         checkLoggedIn();
-        setToken(item);
       }
     }
-
     window.addEventListener("storage", listenForStorage);
     return () => {
       window.removeEventListener("storage", listenForStorage);
@@ -47,7 +48,7 @@ export const UserProvider = ({ children }) => {
       <ToastContainer
         limit={1}
         position={"top-right"}
-        autoClose={2500}
+        autoClose={750}
         hideProgressBar={false}
         closeOnClick={true}
       />
