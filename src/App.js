@@ -38,7 +38,7 @@ function App() {
 
   return (
     <Grid container direction="column">
-      <CornerRibbon position="bottom-left">TEST v1.6.0</CornerRibbon>
+      <CornerRibbon position="bottom-left">TEST v1.8.0</CornerRibbon>
       <NavbarComponent />
       <Grid style={{ height: halfHeight }}>
         <Routes>
