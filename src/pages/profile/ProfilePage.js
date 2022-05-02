@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useContext } from "react";
-import { Helmet } from "react-helmet";
 import userService from "../../api/userService";
 import UserContext from "../../userContext";
 import ProfileTextFields from "./components/ProfileTextFields";
@@ -28,10 +27,6 @@ export default function ProfilePage() {
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>My profile - Parkii.dk</title>
-      </Helmet>
       <Container
         component="main"
         maxWidth="xs"

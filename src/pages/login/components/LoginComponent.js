@@ -6,7 +6,6 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Helmet } from "react-helmet";
 
 export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
   const [email, setEmail] = useState("");
@@ -19,10 +18,6 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Login - Parkii.dk</title>
-      </Helmet>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

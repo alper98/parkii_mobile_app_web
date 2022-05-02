@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "../Util/validationSchema";
 
@@ -29,10 +28,6 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
 
   return (
     <>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Sign up - Parkii.dk</title>
-      </Helmet>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

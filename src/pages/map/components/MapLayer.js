@@ -13,12 +13,7 @@ export function MapLayer({ zones, restrictions }) {
         <Layer {...zonesStyle} />
         <Layer {...zonesTextStyle} />
       </Source>
-      <Source
-        id="restrictions"
-        key={"restrictions"}
-        type="geojson"
-        data={restrictions}
-      >
+      <Source id="restrictions" type="geojson" data={restrictions}>
         <Layer {...restrictionsStyle} />
         <Layer {...restrictionsTextStyle} />
       </Source>

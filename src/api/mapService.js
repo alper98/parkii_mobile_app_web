@@ -1,19 +1,7 @@
 import api from "./ApiClient";
 import { toast } from "react-toastify";
 class MapService {
-  // getZones = async () => {
-  //   try {
-  //     const response = await api.get("/parking/zones");
-  //     if (response.data) return { zones: response.data };
-  //   } catch (error) {
-  //     if (error.response) {
-  //       return { error: error.response.data.message };
-  //     } else {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
-  getRestrictions = async (latitude, longitude, distance = 0.5) => {
+  getRestrictions = async (latitude, longitude, distance = 30) => {
     const response = await toast.promise(
       api.get("/parking/restrictions", {
         params: {
@@ -23,8 +11,8 @@ class MapService {
         },
       }),
       {
-        pending: "Loading restrictions...",
-        success: "Loaded restrictions!",
+        pending: "Loading map...",
+        success: "Loaded map!",
         error: {
           render({ data }) {
             return data.response.data.message;
@@ -32,7 +20,12 @@ class MapService {
         },
       }
     );
-    if (response.data) return { restrictions: response.data };
+    console.log(response);
+    if (response.data.features.length > 0) {
+      return { restrictions: response.data };
+    } else {
+      return false;
+    }
   };
 }
 

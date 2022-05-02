@@ -1,7 +1,14 @@
 import Grid from "@mui/material/Grid";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { use100vh } from "react-div-100vh";
-import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import CameraPage from "./pages/camera/CameraPage";
@@ -13,7 +20,7 @@ import UserContext from "./userContext";
 
 const ProtectedRoute = () => {
   const location = useLocation();
-  const [user] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
 
   return user ? (
     <Outlet />
@@ -25,6 +32,8 @@ const ProtectedRoute = () => {
 function App() {
   const height = use100vh();
   const halfHeight = height ? height * 0.9 : "90vh";
+  const [user, setUser] = useContext(UserContext);
+  const navigate = useNavigate();
 
   return (
     <Grid container direction="column">

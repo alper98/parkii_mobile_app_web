@@ -17,8 +17,6 @@ export const UserProvider = ({ children }) => {
       toast.error("Expired or invalid session - Log in again");
       navigate("/login");
     } else if (cuser) {
-      toast.info("Session restored");
-      toast.clearWaitingQueue();
       setUser(cuser);
       return;
     }
