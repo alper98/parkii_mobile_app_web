@@ -17,6 +17,7 @@ import MapPage from "./pages/map/MapPage";
 import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import UserContext from "./userContext";
+import CornerRibbon from "react-corner-ribbon";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <Grid container direction="column">
+      <CornerRibbon position="bottom-left">TEST v1.6.0</CornerRibbon>
       <NavbarComponent />
       <Grid style={{ height: halfHeight }}>
         <Routes>

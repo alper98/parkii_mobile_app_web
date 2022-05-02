@@ -1,14 +1,10 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Typography from "@mui/material/Typography";
 import { useEffect, useRef, useState } from "react";
-import Lottie from "react-lottie";
 import Map, { GeolocateControl } from "react-map-gl";
 import mapService from "../../api/mapService";
-import * as spinner from "../../lotties/spinner.json";
 import zones from "../../zones.json";
 import { AddressCard } from "./components/AddressCard";
 import { MapLayer } from "./components/MapLayer";
-import { calcDistance } from "./util/MapUtils";
 
 export default function MapPage() {
   const mapRef = useRef();

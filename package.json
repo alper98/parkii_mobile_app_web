@@ -20,6 +20,7 @@
     "object-diff": "^0.0.4",
     "react": "^18.0.0",
     "react-camera-ios": "^0.2.1",
+    "react-corner-ribbon": "^0.0.5",
     "react-div-100vh": "^0.7.0",
     "react-dom": "^18.0.0",
     "react-fetch-hook": "^1.9.5",
