@@ -1,9 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Container, TextField } from "@material-ui/core";
-import diff from "object-diff";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import UserContext from "../../../userContext";
 import { validationSchema } from "../util/ProfileUtils";
 
@@ -16,7 +14,8 @@ export default function ProfileTextFields({ handleUpdate }) {
     resolver: yupResolver(validationSchema),
   });
 
-  const [user, setUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const [user, setUser] = currentUser;
 
   const handleClick = (data) => {
     for (const key in data) {

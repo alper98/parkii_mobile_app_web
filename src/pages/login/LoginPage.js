@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../api/authService";
 import UserService from "../../api/userService";
@@ -9,7 +9,8 @@ import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginPage() {
   const [isLogIn, setIsLogIn] = useState(true);
-  const [user, setUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const [user, setUser] = currentUser;
   const navigate = useNavigate();
 
   const handleLoginSignUp = () => {
@@ -31,6 +32,12 @@ export default function LoginPage() {
       setUser(getUserResponse.user);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, []);
 
   return (
     <Grid

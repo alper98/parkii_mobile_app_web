@@ -5,7 +5,6 @@ class AuthService {
   login = async (email, password) => {
     const credentials = { email, password };
     const response = await toast.promise(api.post("/login", credentials), {
-      pending: "Loggin in...",
       success: "Logged in!",
       error: {
         render({ data }) {
@@ -24,8 +23,8 @@ class AuthService {
     }
     try {
       const response = await api.get("/user");
-      if (response.data.user) {
-        return response.data.user;
+      if (response.data) {
+        return response.data;
       }
     } catch (error) {
       localStorage.removeItem("access_token");

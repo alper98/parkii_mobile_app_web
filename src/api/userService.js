@@ -16,7 +16,6 @@ class UserService {
   };
   create = async (data) => {
     const response = await toast.promise(api.post("/register", data), {
-      pending: "Creating user...",
       success: `${data.name} has been created!`,
       error: {
         render({ data }) {
@@ -32,7 +31,6 @@ class UserService {
 
   update = async (id, data) => {
     const response = await toast.promise(api.put(`/users/${id}`, data), {
-      pending: "Updating profile...",
       success: `Updated profile!`,
       error: {
         render({ data }) {
@@ -47,7 +45,6 @@ class UserService {
 
   delete = async (id) => {
     const response = await toast.promise(api.delete(`/users/${id}`), {
-      pending: "Deleting profile...",
       success: {
         render({ data }) {
           return data.data.message;

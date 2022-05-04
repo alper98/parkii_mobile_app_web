@@ -21,7 +21,8 @@ import CornerRibbon from "react-corner-ribbon";
 
 const ProtectedRoute = () => {
   const location = useLocation();
-  const [user, setUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const [user, setUser] = currentUser;
 
   return user ? (
     <Outlet />
@@ -33,8 +34,6 @@ const ProtectedRoute = () => {
 function App() {
   const height = use100vh();
   const halfHeight = height ? height * 0.9 : "90vh";
-  const [user, setUser] = useContext(UserContext);
-  const navigate = useNavigate();
 
   return (
     <Grid container direction="column">

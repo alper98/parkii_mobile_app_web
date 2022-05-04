@@ -14,7 +14,8 @@ const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
-  const [user, setUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const [user, setUser] = currentUser;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);

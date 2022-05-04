@@ -8,6 +8,8 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
+
+  const [settings, setSettings] = useState(null);
   const navigate = useNavigate();
 
   const checkLoggedIn = async () => {
@@ -17,7 +19,8 @@ export const UserProvider = ({ children }) => {
       toast.error("Expired or invalid session - Log in again");
       navigate("/login");
     } else if (cuser) {
-      setUser(cuser);
+      setSettings(localStorage.getItem("settings"));
+      setUser(cuser.user);
       return;
     }
   };
@@ -40,7 +43,12 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <UserContext.Provider
+      value={{
+        currentUser: [user, setUser],
+        currentSettings: [settings, setSettings],
+      }}
+    >
       {user ? children : <LoginPage />}
       <ToastContainer
         limit={1}

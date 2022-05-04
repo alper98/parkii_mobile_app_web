@@ -1,15 +1,16 @@
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useContext } from "react";
 import userService from "../../api/userService";
 import UserContext from "../../userContext";
-import ProfileTextFields from "./components/ProfileTextFields";
 import ProfileCard from "./components/ProfileCard";
-import { Typography } from "@mui/material";
+import ProfileTextFields from "./components/ProfileTextFields";
 
 export default function ProfilePage() {
-  const [user, setUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const [user, setUser] = currentUser;
 
   const handleUpdate = async (data) => {
     const response = await userService.update(user.id, data);
