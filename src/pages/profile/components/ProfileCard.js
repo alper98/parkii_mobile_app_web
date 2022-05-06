@@ -10,8 +10,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import { format, parseISO } from "date-fns";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function ProfileCard({ user, handleDelete }) {
+export default function ProfileCard({ handleDelete }) {
+  const user = useSelector((s) => s.user.user);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

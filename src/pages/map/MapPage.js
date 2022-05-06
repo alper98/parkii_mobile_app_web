@@ -1,99 +1,80 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Typography from "@mui/material/Typography";
-import { useContext, useEffect, useRef, useState } from "react";
+import * as turf from "@turf/turf";
+import { distanceTo } from "geolocation-utils";
+import { useEffect, useRef } from "react";
 import Lottie from "react-lottie";
 import Map, { GeolocateControl } from "react-map-gl";
-import mapService from "../../api/mapService";
+import { useDispatch, useSelector } from "react-redux";
 import * as spinner from "../../lotties/spinner.json";
-import UserContext from "../../userContext";
-import { AddressCard } from "./components/AddressCard";
+import {
+  fetchRestrictions,
+  fetchZones,
+  setCurrentZone,
+  setViewState,
+} from "../../redux/features/mapSlice";
+import { InformationCard } from "./components/InformationCard";
 import { MapLayer } from "./components/MapLayer";
-import { calcCrow } from "./util/MapUtil";
+import {
+  restrictionsStyle,
+  restrictionsTextStyle,
+  zonesStyle,
+  zonesTextStyle,
+} from "./components/MapStyle";
 
 export default function MapPage() {
   const mapRef = useRef();
   const geolocateControlRef = useRef();
-  const [restrictions, setRestrictions] = useState();
-  const [zones, setZones] = useState();
-  const { currentUser, currentSettings } = useContext(UserContext);
-  const [user, setUser] = currentUser;
-  const [settings, setSettings] = currentSettings;
-  const [isLoading, setIsLoading] = useState(false);
 
-  const [startingCoords, setStartingCoords] = useState({
-    longitude: 12.582434715425201,
-    latitude: 55.67415673591182,
-  });
-
-  const [viewState, setViewState] = useState({
-    longitude: 12.582434715425201,
-    latitude: 55.67415673591182,
-    zoom: 13,
-  });
-
-  async function getRestrictions(latitude, longitude) {
-    const response = await mapService.getRestrictions(
-      latitude,
-      longitude,
-      settings
-    );
-    if (response.restrictions) {
-      setRestrictions(response.restrictions);
-    }
-  }
-  async function getZones() {
-    const response = await mapService.getZones();
-    if (response.zones) {
-      setZones(response.zones);
-    }
-  }
+  const mapStyle = useSelector((s) => s.map.mapStyle);
+  const viewState = useSelector((s) => s.map.viewState);
+  const startingCoords = useSelector((s) => s.map.startingCoords);
+  const radius = useSelector((s) => s.user.settings.radius);
+  const restrictions = useSelector((s) => s.map.restrictions);
+  const zones = useSelector((s) => s.map.zones);
+  const currentZone = useSelector((s) => s.map.currentZone);
+  const dispatch = useDispatch();
+  const mapLoading = useSelector((s) => s.map.mapLoading);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      getRestrictions(pos.coords.latitude, pos.coords.longitude);
-      setViewState((state) => ({
-        ...state,
-        longitude: pos.coords.longitude,
-        latitude: pos.coords.latitude,
-      }));
-      setStartingCoords((state) => ({
-        ...state,
-        longitude: pos.coords.longitude,
-        latitude: pos.coords.latitude,
-      }));
+    navigator.geolocation.getCurrentPosition((pos) => {
+      dispatch(
+        setViewState({
+          longitude: pos.coords.longitude,
+          latitude: pos.coords.latitude,
+        })
+      );
+      dispatch(
+        fetchRestrictions({
+          longitude: pos.coords.longitude,
+          latitude: pos.coords.latitude,
+          distance: radius,
+        })
+      );
+      dispatch(fetchZones());
     });
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      await getZones();
-      await getRestrictions(viewState.latitude, viewState.longitude);
-      setIsLoading(false);
-    }
-    fetchData();
-  }, []);
+    const distance = distanceTo(
+      { lat: startingCoords.latitude, lon: startingCoords.longitude },
+      { lat: viewState.latitude, lon: viewState.longitude }
+    );
 
-  useEffect(() => {
-    if (
-      calcCrow(
-        startingCoords.latitude,
-        startingCoords.longitude,
-        viewState.latitude,
-        viewState.longitude
-      ) >
-      (settings * 0.001) / 2
-    ) {
-      getRestrictions(viewState.latitude, viewState.longitude);
-      setStartingCoords((state) => ({
-        ...state,
-        longitude: viewState.longitude,
-        latitude: viewState.latitude,
-      }));
+    const distanceFromSettings = (radius * 0.001) / 2;
+
+    if (distance > distanceFromSettings) {
+      dispatch(
+        fetchRestrictions({
+          latitude: viewState.latitude,
+          longitude: viewState.longitude,
+          distance: radius,
+        })
+      );
     }
   }, [viewState.latitude, viewState.longitude]);
 
-  if (isLoading)
+  if (mapLoading)
     return (
       <Typography variant="h5" textAlign={"center"}>
         <Lottie
@@ -113,7 +94,7 @@ export default function MapPage() {
           geolocateControlRef.current.trigger();
         }}
         initialViewState={viewState}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle={mapStyle}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
       >
         <GeolocateControl
@@ -123,17 +104,29 @@ export default function MapPage() {
           }}
           trackUserLocation={true}
           onGeolocate={(pos) => {
-            setViewState((state) => ({
-              ...state,
-              longitude: pos.coords.longitude,
-              latitude: pos.coords.latitude,
-            }));
+            dispatch(
+              setViewState({
+                longitude: pos.coords.longitude,
+                latitude: pos.coords.latitude,
+              })
+            );
           }}
         />
-        {restrictions && zones && (
-          <MapLayer zones={zones} restrictions={restrictions} />
+        {zones && (
+          <MapLayer
+            data={zones}
+            dataStyle={zonesStyle}
+            dataTextStyle={zonesTextStyle}
+          />
         )}
-        <AddressCard viewState={viewState} />
+        {restrictions && (
+          <MapLayer
+            data={restrictions}
+            dataStyle={restrictionsStyle}
+            dataTextStyle={restrictionsTextStyle}
+          />
+        )}
+        <InformationCard />
       </Map>
     </>
   );

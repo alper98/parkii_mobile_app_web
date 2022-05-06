@@ -3,19 +3,22 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../../userContext";
+import { toast } from "react-toastify";
+import { setUser } from "../../redux/features/userSlice";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
-import { toast } from "react-toastify";
+
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
   const navigate = useNavigate();
-  const { currentUser } = useContext(UserContext);
-  const [user, setUser] = currentUser;
+  const dispatch = useDispatch();
+  const user = useSelector((s) => s.user.user);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,7 +37,7 @@ const NavbarComponent = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    setUser(null);
+    dispatch(setUser(null));
     setAnchorElUser(null);
     toast.info("Logged out");
   };
@@ -49,14 +52,6 @@ const NavbarComponent = () => {
         <Toolbar disableGutters>
           {user && (
             <>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-              >
-                Parkii.dk
-              </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <MobileMenuItems
                   handleOpenNavMenu={handleOpenNavMenu}
@@ -64,6 +59,14 @@ const NavbarComponent = () => {
                   handleCloseNavMenu={handleCloseNavMenu}
                 />
               </Box>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ mr: 2, display: { md: "flex" } }}
+              >
+                Parkii.dk
+              </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 <DesktopMenuItems
                   handleClickDesktopMenu={handleClickDesktopMenu}
@@ -74,7 +77,6 @@ const NavbarComponent = () => {
                   handleOpenUserMenu={handleOpenUserMenu}
                   anchorElUser={anchorElUser}
                   handleCloseUserMenu={handleCloseUserMenu}
-                  user={user}
                   handleLogout={handleLogout}
                 />
               </Box>

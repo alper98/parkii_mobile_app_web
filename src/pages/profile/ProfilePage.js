@@ -2,27 +2,27 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import userService from "../../api/userService";
-import UserContext from "../../userContext";
+import { setUser } from "../../redux/features/userSlice";
 import ProfileCard from "./components/ProfileCard";
 import ProfileTextFields from "./components/ProfileTextFields";
 
 export default function ProfilePage() {
-  const { currentUser } = useContext(UserContext);
-  const [user, setUser] = currentUser;
+  const user = useSelector((s) => s.user.user);
+  const dispatch = useDispatch();
 
   const handleUpdate = async (data) => {
     const response = await userService.update(user.id, data);
     if (response.user) {
-      setUser(response.user);
+      dispatch(setUser(response.user));
     }
   };
 
   const handleDelete = async () => {
     const response = await userService.delete(user.id);
     if (response) {
-      setUser(null);
+      dispatch(setUser(null));
     }
   };
 
@@ -42,7 +42,7 @@ export default function ProfilePage() {
           }}
         >
           <Box>
-            <ProfileCard user={user} handleDelete={handleDelete} />
+            <ProfileCard handleDelete={handleDelete} />
           </Box>
           <Box sx={{ margin: 1 }}>
             <Typography variant="h6">Edit your profile</Typography>

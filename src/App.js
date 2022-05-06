@@ -1,14 +1,16 @@
 import Grid from "@mui/material/Grid";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Navigate,
   Outlet,
   Route,
   Routes,
   useLocation,
-  useNavigate,
+  useNavigate
 } from "react-router-dom";
+import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import CameraPage from "./pages/camera/CameraPage";
@@ -16,13 +18,24 @@ import LoginPage from "./pages/login/LoginPage";
 import MapPage from "./pages/map/MapPage";
 import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-import UserContext from "./userContext";
-import CornerRibbon from "react-corner-ribbon";
+import { setUser } from "./redux/features/userSlice";
 
 const ProtectedRoute = () => {
   const location = useLocation();
-  const { currentUser } = useContext(UserContext);
-  const [user, setUser] = currentUser;
+  const user = useSelector((s) => s.user.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const response = await userService.get();
+      if (response.user) {
+        navigate(location.pathname);
+        dispatch(setUser(response.user));
+      }
+    }
+    fetchUser();
+  }, []);
 
   return user ? (
     <Outlet />
@@ -37,7 +50,6 @@ function App() {
 
   return (
     <Grid container direction="column">
-      <CornerRibbon position="bottom-left">TEST v1.8.0</CornerRibbon>
       <NavbarComponent />
       <Grid style={{ height: halfHeight }}>
         <Routes>

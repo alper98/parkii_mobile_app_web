@@ -1,17 +1,19 @@
 import Grid from "@mui/material/Grid";
-import { useContext, useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../api/authService";
 import UserService from "../../api/userService";
-import UserContext from "../../userContext";
+import { setUser } from "../../redux/features/userSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginPage() {
   const [isLogIn, setIsLogIn] = useState(true);
-  const { currentUser } = useContext(UserContext);
-  const [user, setUser] = currentUser;
+  const user = useSelector((s) => s.user.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const radius = useSelector((s) => s.user.settings.radius);
 
   const handleLoginSignUp = () => {
     setIsLogIn(!isLogIn);
@@ -20,7 +22,7 @@ export default function LoginPage() {
   const handleLogin = async (email, password) => {
     const response = await AuthService.login(email, password);
     if (response.user) {
-      setUser(response.user);
+      dispatch(setUser(response.user));
       navigate("/profile");
     }
   };
@@ -29,7 +31,7 @@ export default function LoginPage() {
     const response = await UserService.create(data);
     if (response.access_token) {
       const getUserResponse = await UserService.get();
-      setUser(getUserResponse.user);
+      dispatch(setUser(getUserResponse.user));
     }
   };
 

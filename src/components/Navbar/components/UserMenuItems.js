@@ -1,20 +1,12 @@
-import MapIcon from "@mui/icons-material/Map";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Slider from "@mui/material/Slider";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import { useContext, useState } from "react";
-import UserContext from "../../../userContext";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSettings } from "../../../redux/features/userSlice";
+import { SettingsDialog } from "./SettingsDialog";
 
 export function UserMenuItems({
   handleOpenUserMenu,
@@ -22,9 +14,9 @@ export function UserMenuItems({
   handleCloseUserMenu,
   handleLogout,
 }) {
-  const { currentUser, currentSettings } = useContext(UserContext);
-  const [user, setUser] = currentUser;
-  const [settings, setSettings] = currentSettings;
+  const user = useSelector((s) => s.user.user);
+  const radius = useSelector((s) => s.user.settings.radius);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -37,8 +29,12 @@ export function UserMenuItems({
   };
 
   const handleInputChange = (event) => {
-    localStorage.setItem("settings", settings);
-    setSettings(event.target.value === "" ? "" : Number(event.target.value));
+    localStorage.setItem("settings", radius);
+    dispatch(
+      setSettings({
+        radius: event.target.value === "" ? "" : Number(event.target.value),
+      })
+    );
   };
 
   return (
@@ -76,36 +72,13 @@ export function UserMenuItems({
         </MenuItem>
         <MenuItem onClick={handleClickOpen}>Settings</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        <Dialog
+        <SettingsDialog
           open={open}
-          fullWidth
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
-          <DialogContent>
-            <Typography id="input-slider" gutterBottom>
-              Set restrictions radius
-            </Typography>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs>
-                <Slider
-                  value={settings}
-                  onChange={handleInputChange}
-                  valueLabelDisplay="auto"
-                  step={50}
-                  min={100}
-                  max={1000}
-                />
-              </Grid>
-              <Grid item>{settings} meters</Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
+          handleClose={handleClose}
+          Number={Number}
+          radius={radius}
+          handleInputChange={handleInputChange}
+        />
       </Menu>
     </>
   );

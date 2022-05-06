@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 class UserService {
   get = async () => {
+    if (!localStorage.getItem("access_token")) return;
     try {
       const response = await api.get(`/user`);
       return { user: response.data.user };

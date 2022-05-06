@@ -1,8 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Container, TextField } from "@material-ui/core";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import UserContext from "../../../userContext";
+import { useSelector } from "react-redux";
 import { validationSchema } from "../util/ProfileUtils";
 
 export default function ProfileTextFields({ handleUpdate }) {
@@ -14,8 +13,7 @@ export default function ProfileTextFields({ handleUpdate }) {
     resolver: yupResolver(validationSchema),
   });
 
-  const { currentUser } = useContext(UserContext);
-  const [user, setUser] = currentUser;
+  const user = useSelector((s) => s.user.user);
 
   const handleClick = (data) => {
     for (const key in data) {
