@@ -24,9 +24,13 @@ class UserService {
         },
       },
     });
-    if (response.data.access_token) {
-      localStorage.setItem("access_token", response.data.access_token);
-      return { access_token: response.data.access_token };
+    if (response.status !== 200) {
+      return false;
+    }
+    localStorage.setItem("access_token", response?.data?.access_token);
+    return {
+      access_token: response?.data?.access_token,
+      user: response?.data?.user
     }
   };
 
