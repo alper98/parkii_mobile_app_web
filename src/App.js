@@ -3,13 +3,18 @@ import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Navigate,
   Outlet,
   Route,
   Routes,
   useLocation,
-  useNavigate
+  useNavigate,
+  Navigate,
 } from "react-router-dom";
+import {
+  fetchRestrictions,
+  fetchZones,
+  setViewState,
+} from "./redux/features/mapSlice";
 import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -25,12 +30,32 @@ const ProtectedRoute = () => {
   const user = useSelector((s) => s.user.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const radius = useSelector((s) => s.user.settings.radius);
 
   useEffect(() => {
+    async function fetchData() {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        dispatch(
+          setViewState({
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude,
+          })
+        );
+        dispatch(
+          fetchRestrictions({
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude,
+            distance: radius,
+          })
+        );
+        dispatch(fetchZones());
+      });
+    }
     async function fetchUser() {
       const response = await userService.get();
-      if (response.user) {
+      if (response?.user) {
         navigate(location.pathname);
+        fetchData();
         dispatch(setUser(response.user));
       }
     }

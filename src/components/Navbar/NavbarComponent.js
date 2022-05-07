@@ -39,6 +39,7 @@ const NavbarComponent = () => {
     localStorage.removeItem("access_token");
     dispatch(setUser(null));
     setAnchorElUser(null);
+    navigate("/login");
     toast.info("Logged out");
   };
 

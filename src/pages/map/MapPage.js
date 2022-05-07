@@ -1,18 +1,9 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Typography from "@mui/material/Typography";
-import * as turf from "@turf/turf";
 import { distanceTo } from "geolocation-utils";
 import { useEffect, useRef } from "react";
-import Lottie from "react-lottie";
 import Map, { GeolocateControl } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
-import * as spinner from "../../lotties/spinner.json";
-import {
-  fetchRestrictions,
-  fetchZones,
-  setCurrentZone,
-  setViewState,
-} from "../../redux/features/mapSlice";
+import { fetchRestrictions, setViewState } from "../../redux/features/mapSlice";
 import { InformationCard } from "./components/InformationCard";
 import { MapLayer } from "./components/MapLayer";
 import {
@@ -34,26 +25,6 @@ export default function MapPage() {
   const zones = useSelector((s) => s.map.zones);
   const currentZone = useSelector((s) => s.map.currentZone);
   const dispatch = useDispatch();
-  const mapLoading = useSelector((s) => s.map.mapLoading);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      dispatch(
-        setViewState({
-          longitude: pos.coords.longitude,
-          latitude: pos.coords.latitude,
-        })
-      );
-      dispatch(
-        fetchRestrictions({
-          longitude: pos.coords.longitude,
-          latitude: pos.coords.latitude,
-          distance: radius,
-        })
-      );
-      dispatch(fetchZones());
-    });
-  }, []);
 
   useEffect(() => {
     const distance = distanceTo(
@@ -74,20 +45,10 @@ export default function MapPage() {
     }
   }, [viewState.latitude, viewState.longitude]);
 
-  if (mapLoading)
-    return (
-      <Typography variant="h5" textAlign={"center"}>
-        <Lottie
-          options={{ loop: true, autoplay: true, animationData: spinner }}
-          height={250}
-          width={250}
-        />
-        Initializing map...
-      </Typography>
-    );
-
   return (
     <>
+      <div>{viewState.latitude}</div>
+      <div>{viewState.longitude}</div>
       <Map
         ref={mapRef}
         onLoad={() => {

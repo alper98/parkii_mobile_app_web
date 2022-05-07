@@ -56,19 +56,11 @@ export const mapSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchRestrictions.pending]: (state, { payload }) => {
-      state.mapLoading = true;
-    },
     [fetchRestrictions.fulfilled]: (state, { payload }) => {
       state.restrictions = payload;
       state.startingCoords = state.viewState;
-      state.mapLoading = false;
-    },
-    [fetchZones.pending]: (state, { payload }) => {
-      state.mapLoading = true;
     },
     [fetchZones.fulfilled]: (state, { payload }) => {
-      state.mapLoading = false;
       state.zones = payload;
     },
   },
