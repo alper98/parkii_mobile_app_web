@@ -7,8 +7,8 @@ class AuthService {
     const response = await toast.promise(api.post("/login", credentials), {
       success: "Logged in!",
       error: {
-        render({ err }) {
-          return err.response.data.message;
+        render({ data }) {
+          return data.response.data.message;
         },
       },
     });
