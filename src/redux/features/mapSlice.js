@@ -15,10 +15,33 @@ export const fetchRestrictions = createAsyncThunk(
   }
 );
 export const fetchZones = createAsyncThunk("maps/zones", async (thunkAPI) => {
-  console.log("silent fetching");
   const response = await mapService.getZones();
   return response.zones;
 });
+
+export const getUserLocation = createAsyncThunk(
+  "maps/getLocation",
+  async (_, thunkAPI) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition((pos) => {
+        thunkAPI.dispatch(
+          setViewState({
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude,
+          })
+        );
+        thunkAPI.dispatch(
+          setStartingCoords({
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude,
+          })
+        );
+      });
+    } else {
+      alert("Unable to get location");
+    }
+  }
+);
 
 const initialState = {
   mapStyle: "mapbox://styles/mapbox/streets-v9",

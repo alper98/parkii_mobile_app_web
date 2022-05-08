@@ -17,6 +17,7 @@ class UserService {
   };
   create = async (data) => {
     const response = await toast.promise(api.post("/register", data), {
+      pending: `Creaing ${data.name}...`,
       success: `${data.name} has been created!`,
       error: {
         render({ data }) {
@@ -30,8 +31,8 @@ class UserService {
     localStorage.setItem("access_token", response?.data?.access_token);
     return {
       access_token: response?.data?.access_token,
-      user: response?.data?.user
-    }
+      user: response?.data?.user,
+    };
   };
 
   update = async (id, data) => {

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../api/authService";
 import UserService from "../../api/userService";
+import { getUserLocation } from "../../redux/features/mapSlice";
 import { setUser } from "../../redux/features/userSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
@@ -13,7 +14,6 @@ export default function LoginPage() {
   const user = useSelector((s) => s.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const radius = useSelector((s) => s.user.settings.radius);
 
   const handleLoginSignUp = () => {
     setIsLogIn(!isLogIn);
@@ -21,28 +21,29 @@ export default function LoginPage() {
 
   const handleLogin = async (email, password) => {
     const response = await AuthService.login(email, password);
-    if (!response.user) {
-      navigate("/login");
+    if (response?.user) {
+      await dispatch(setUser(response.user));
     }
-    dispatch(setUser(response.user));
-    navigate("/map");
-
   };
 
   const handleSignUp = async (data) => {
     const response = await UserService.create(data);
-    if (!response?.user) {
-      navigate("/login");
+    if (response?.user) {
+      await dispatch(setUser(response.user));
     }
-    dispatch(setUser(response.user));
-    navigate("/profile");
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/profile");
+    async function fetchData() {
+      if (user) {
+        await dispatch(getUserLocation());
+        navigate("/profile");
+      } else {
+        navigate("/login");
+      }
     }
-  }, []);
+    fetchData();
+  }, [user]);
 
   return (
     <Grid

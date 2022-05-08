@@ -3,14 +3,13 @@ import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Navigate,
   Outlet,
   Route,
   Routes,
   useLocation,
-  useNavigate,
-  Navigate,
+  useNavigate
 } from "react-router-dom";
-import { setStartingCoords, setViewState } from "./redux/features/mapSlice";
 import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -19,6 +18,7 @@ import LoginPage from "./pages/login/LoginPage";
 import MapPage from "./pages/map/MapPage";
 import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import { getUserLocation } from "./redux/features/mapSlice";
 import { setUser } from "./redux/features/userSlice";
 
 const ProtectedRoute = () => {
@@ -28,27 +28,11 @@ const ProtectedRoute = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (navigator?.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        dispatch(
-          setViewState({
-            longitude: pos.coords.longitude,
-            latitude: pos.coords.latitude,
-          })
-        );
-        dispatch(
-          setStartingCoords({
-            longitude: pos.coords.longitude,
-            latitude: pos.coords.latitude,
-          })
-        );
-      });
-    }
     async function fetchUser() {
       const response = await userService.get();
       if (response?.user) {
-        navigate(location.pathname);
-        dispatch(setUser(response.user));
+        await dispatch(getUserLocation());
+        await dispatch(setUser(response.user));
       }
     }
     fetchUser();

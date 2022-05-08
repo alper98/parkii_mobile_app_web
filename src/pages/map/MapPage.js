@@ -18,6 +18,7 @@ import {
   zonesStyle,
   zonesTextStyle,
 } from "./components/MapStyle";
+import { distanceTo } from "geolocation-utils";
 
 export default function MapPage() {
   const mapRef = useRef();
@@ -27,6 +28,7 @@ export default function MapPage() {
   const restrictions = useSelector((s) => s.map.restrictions);
   const radius = useSelector((s) => s.user.settings.radius);
   const viewState = useSelector((s) => s.map.viewState);
+  const startingCoords = useSelector((s) => s.map.startingCoords);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadRestrictions = async () => {
@@ -52,6 +54,29 @@ export default function MapPage() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const distance = distanceTo(
+        { lat: startingCoords.latitude, lon: startingCoords.longitude },
+        { lat: viewState.latitude, lon: viewState.longitude }
+      );
+
+      const distanceFromSettings = (radius * 0.001) / 2;
+
+      if (distance > distanceFromSettings) {
+        console.log("fetched");
+        dispatch(
+          await fetchRestrictions({
+            latitude: viewState.latitude,
+            longitude: viewState.longitude,
+            distance: radius,
+          })
+        );
+      }
+    }
+    fetchData();
+  }, [viewState.latitude, viewState.longitude]);
 
   if (isLoading)
     return (
