@@ -21,18 +21,21 @@ export default function LoginPage() {
 
   const handleLogin = async (email, password) => {
     const response = await AuthService.login(email, password);
-    if (response.user) {
-      dispatch(setUser(response.user));
-      navigate("/profile");
+    if (!response.user) {
+      navigate("/login");
     }
+    dispatch(setUser(response.user));
+    navigate("/map");
+
   };
 
   const handleSignUp = async (data) => {
     const response = await UserService.create(data);
-    if (response.access_token) {
-      const getUserResponse = await UserService.get();
-      dispatch(setUser(getUserResponse.user));
+    if (!response?.user) {
+      navigate("/login");
     }
+    dispatch(setUser(response.user));
+    navigate("/profile");
   };
 
   useEffect(() => {
