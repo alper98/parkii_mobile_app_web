@@ -7,29 +7,27 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentZone } from "../../../redux/features/mapSlice";
 
-export function InformationCard() {
+export function InformationCard({ zones }) {
   const viewState = useSelector((s) => s.map.viewState);
 
-  const zones = useSelector((s) => s.map.zones);
   const currentZone = useSelector((s) => s.map.currentZone);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (zones) {
-  //     for (let zone of zones.features) {
-  //       if (
-  //         turf.booleanPointInPolygon(
-  //           [viewState.longitude, viewState.latitude],
-  //           zone.geometry.coordinates
-  //         )
-  //       ) {
-  //         console.log(zone);
-  //         dispatch(setCurrentZone(zone.geometry));
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }, [zones]);
+  useEffect(() => {
+    if (zones) {
+      for (let zone of zones.features) {
+        if (
+          turf.booleanPointInPolygon(
+            [viewState.longitude, viewState.latitude],
+            zone.geometry
+          )
+        ) {
+          dispatch(setCurrentZone(zone));
+          break;
+        }
+      }
+    }
+  }, []);
 
   return (
     <Card

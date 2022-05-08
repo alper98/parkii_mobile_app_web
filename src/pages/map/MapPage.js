@@ -1,9 +1,15 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import { distanceTo } from "geolocation-utils";
-import { useEffect, useRef } from "react";
+import Typography from "@mui/material/Typography";
+import { useEffect, useRef, useState } from "react";
+import Lottie from "react-lottie";
 import Map, { GeolocateControl } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRestrictions, setViewState } from "../../redux/features/mapSlice";
+import * as spinner from "../../lotties/spinner.json";
+import {
+  fetchRestrictions,
+  fetchZones,
+  setViewState,
+} from "../../redux/features/mapSlice";
 import { InformationCard } from "./components/InformationCard";
 import { MapLayer } from "./components/MapLayer";
 import {
@@ -15,47 +21,59 @@ import {
 
 export default function MapPage() {
   const mapRef = useRef();
-  const geolocateControlRef = useRef();
-
-  const mapStyle = useSelector((s) => s.map.mapStyle);
-  const viewState = useSelector((s) => s.map.viewState);
-  const startingCoords = useSelector((s) => s.map.startingCoords);
-  const radius = useSelector((s) => s.user.settings.radius);
-  const restrictions = useSelector((s) => s.map.restrictions);
-  const zones = useSelector((s) => s.map.zones);
-  const currentZone = useSelector((s) => s.map.currentZone);
   const dispatch = useDispatch();
+  const geolocateControlRef = useRef();
+  const zones = useSelector((s) => s.map.zones);
+  const restrictions = useSelector((s) => s.map.restrictions);
+  const radius = useSelector((s) => s.user.settings.radius);
+  const viewState = useSelector((s) => s.map.viewState);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadRestrictions = async () => {
+    await dispatch(
+      fetchRestrictions({
+        latitude: viewState.latitude,
+        longitude: viewState.longitude,
+        distance: radius,
+      })
+    );
+    setIsLoading(false);
+  };
+
+  const loadZones = async () => {
+    await dispatch(fetchZones());
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const distance = distanceTo(
-      { lat: startingCoords.latitude, lon: startingCoords.longitude },
-      { lat: viewState.latitude, lon: viewState.longitude }
-    );
-
-    const distanceFromSettings = (radius * 0.001) / 2;
-
-    if (distance > distanceFromSettings) {
-      dispatch(
-        fetchRestrictions({
-          latitude: viewState.latitude,
-          longitude: viewState.longitude,
-          distance: radius,
-        })
-      );
+    async function fetchData() {
+      await loadZones();
+      await loadRestrictions();
     }
-  }, [viewState.latitude, viewState.longitude]);
+    fetchData();
+  }, []);
+
+  if (isLoading)
+    return (
+      <Typography variant="h5" textAlign={"center"}>
+        <Lottie
+          options={{ loop: true, autoplay: true, animationData: spinner }}
+          height={250}
+          width={250}
+        />
+        Initializing map...
+      </Typography>
+    );
 
   return (
     <>
-      <div>{viewState.latitude}</div>
-      <div>{viewState.longitude}</div>
       <Map
         ref={mapRef}
         onLoad={() => {
           geolocateControlRef.current.trigger();
         }}
         initialViewState={viewState}
-        mapStyle={mapStyle}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
       >
         <GeolocateControl
@@ -65,29 +83,28 @@ export default function MapPage() {
           }}
           trackUserLocation={true}
           onGeolocate={(pos) => {
-            dispatch(
-              setViewState({
-                longitude: pos.coords.longitude,
-                latitude: pos.coords.latitude,
-              })
-            );
+            setViewState((state) => ({
+              ...state,
+              longitude: pos.coords.longitude,
+              latitude: pos.coords.latitude,
+            }));
           }}
         />
-        {zones && (
+        {!isLoading && zones && (
           <MapLayer
             data={zones}
             dataStyle={zonesStyle}
             dataTextStyle={zonesTextStyle}
           />
         )}
-        {restrictions && (
+        {!isLoading && restrictions && (
           <MapLayer
             data={restrictions}
             dataStyle={restrictionsStyle}
             dataTextStyle={restrictionsTextStyle}
           />
         )}
-        <InformationCard />
+        <InformationCard zones={zones} />
       </Map>
     </>
   );
