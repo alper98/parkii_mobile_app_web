@@ -26,12 +26,12 @@ const initialState = {
   viewState: {
     latitude: 55.676098,
     longitude: 12.568337,
-    zoom: 14,
+    zoom: 12,
   },
   startingCoords: {
     latitude: 55.676098,
     longitude: 12.568337,
-    zoom: 14,
+    zoom: 12,
   },
   restrictions: null,
   zones: null,
@@ -44,6 +44,9 @@ export const mapSlice = createSlice({
   reducers: {
     setViewState: (state, action) => {
       state.viewState = { ...state.viewState, ...action.payload };
+    },
+    setStartingCoords: (state, action) => {
+      state.startingCoords = { ...state.startingCoords, ...action.payload };
     },
     setZones: (state, action) => {
       state.zones = { ...state.zones, ...action.payload };
@@ -67,7 +70,12 @@ export const mapSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setViewState, setZones, setRestrictions, setCurrentZone } =
-  mapSlice.actions;
+export const {
+  setViewState,
+  setZones,
+  setRestrictions,
+  setCurrentZone,
+  setStartingCoords,
+} = mapSlice.actions;
 
 export default mapSlice.reducer;
