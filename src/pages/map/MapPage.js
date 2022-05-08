@@ -65,7 +65,6 @@ export default function MapPage() {
       const distanceFromSettings = (radius * 0.001) / 2;
 
       if (distance > distanceFromSettings) {
-        console.log("fetched");
         dispatch(
           await fetchRestrictions({
             latitude: viewState.latitude,

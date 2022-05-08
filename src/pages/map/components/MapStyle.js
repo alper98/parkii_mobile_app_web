@@ -35,13 +35,13 @@ export const restrictionsStyle = {
 };
 
 export const restrictionsTextStyle = {
-  id: "symbols",
+  id: "restrictions",
   type: "symbol",
   source: "restrictions",
   layout: {
     "symbol-placement": "line",
     "text-font": ["Open Sans Regular"],
-    "text-field": "{restriktionstekst}",
+    "text-field": ["get", "restriktionstekst"],
     "text-size": 20,
     "text-allow-overlap": true,
   },
