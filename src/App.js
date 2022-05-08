@@ -2,14 +2,7 @@ import Grid from "@mui/material/Grid";
 import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate
-} from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -24,15 +17,14 @@ import { setUser } from "./redux/features/userSlice";
 const ProtectedRoute = () => {
   const location = useLocation();
   const user = useSelector((s) => s.user.user);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchUser() {
       const response = await userService.get();
       if (response?.user) {
-        await dispatch(getUserLocation());
-        await dispatch(setUser(response.user));
+        dispatch(getUserLocation());
+        dispatch(setUser(response.user));
       }
     }
     fetchUser();

@@ -31,26 +31,17 @@ export default function MapPage() {
   const startingCoords = useSelector((s) => s.map.startingCoords);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadRestrictions = async () => {
-    await dispatch(
-      fetchRestrictions({
-        latitude: viewState.latitude,
-        longitude: viewState.longitude,
-        distance: radius,
-      })
-    );
-    setIsLoading(false);
-  };
-
-  const loadZones = async () => {
-    await dispatch(fetchZones());
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     async function fetchData() {
-      await loadZones();
-      await loadRestrictions();
+      dispatch(fetchZones());
+      dispatch(
+        fetchRestrictions({
+          latitude: viewState.latitude,
+          longitude: viewState.longitude,
+          distance: radius,
+        })
+      );
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -62,11 +53,11 @@ export default function MapPage() {
         { lat: viewState.latitude, lon: viewState.longitude }
       );
 
-      const distanceFromSettings = (radius * 0.001) / 2;
+      const distanceFromSettings = radius / 2;
 
       if (distance > distanceFromSettings) {
         dispatch(
-          await fetchRestrictions({
+          fetchRestrictions({
             latitude: viewState.latitude,
             longitude: viewState.longitude,
             distance: radius,
@@ -107,21 +98,22 @@ export default function MapPage() {
           }}
           trackUserLocation={true}
           onGeolocate={(pos) => {
-            setViewState((state) => ({
-              ...state,
-              longitude: pos.coords.longitude,
-              latitude: pos.coords.latitude,
-            }));
+            dispatch(
+              setViewState({
+                longitude: pos.coords.longitude,
+                latitude: pos.coords.latitude,
+              })
+            );
           }}
         />
-        {!isLoading && zones && (
+        {!isLoading && zones?.features && (
           <MapLayer
             data={zones}
             dataStyle={zonesStyle}
             dataTextStyle={zonesTextStyle}
           />
         )}
-        {!isLoading && restrictions && (
+        {!isLoading && restrictions?.features && (
           <MapLayer
             data={restrictions}
             dataStyle={restrictionsStyle}

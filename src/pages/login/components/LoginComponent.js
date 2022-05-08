@@ -38,6 +38,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
           >
             <TextField
               margin="normal"
+              value={email}
               required
               fullWidth
               id="email"
@@ -50,6 +51,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               margin="normal"
               required
               fullWidth
+              value={password}
               name="password"
               label="Password"
               type="password"

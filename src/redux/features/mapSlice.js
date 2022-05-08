@@ -11,13 +11,24 @@ export const fetchRestrictions = createAsyncThunk(
       longitude,
       distance
     );
-    return response.restrictions;
+    if (!response) {
+      thunkAPI.dispatch(setRestrictions(null));
+    }
+    thunkAPI.dispatch(setRestrictions(response.restrictions));
+    const currentViewState = thunkAPI.getState().map.viewState;
+    thunkAPI.dispatch(setStartingCoords(currentViewState));
   }
 );
-export const fetchZones = createAsyncThunk("maps/zones", async (thunkAPI) => {
-  const response = await mapService.getZones();
-  return response.zones;
-});
+export const fetchZones = createAsyncThunk(
+  "maps/zones",
+  async (_, thunkAPI) => {
+    const response = await mapService.getZones();
+    if (!response) {
+      thunkAPI.dispatch(setZones(null));
+    }
+    thunkAPI.dispatch(setZones(response.zones));
+  }
+);
 
 export const getUserLocation = createAsyncThunk(
   "maps/getLocation",
@@ -52,8 +63,8 @@ const initialState = {
     zoom: 12,
   },
   startingCoords: {
-    latitude: 55.676098,
-    longitude: 12.568337,
+    latitude: 55.6897960048817,
+    longitude: 12.555729340168238,
     zoom: 12,
   },
   restrictions: null,
@@ -79,15 +90,6 @@ export const mapSlice = createSlice({
     },
     setRestrictions: (state, action) => {
       state.restrictions = { ...state.restrictions, ...action.payload };
-    },
-  },
-  extraReducers: {
-    [fetchRestrictions.fulfilled]: (state, { payload }) => {
-      state.restrictions = payload;
-      state.startingCoords = state.viewState;
-    },
-    [fetchZones.fulfilled]: (state, { payload }) => {
-      state.zones = payload;
     },
   },
 });

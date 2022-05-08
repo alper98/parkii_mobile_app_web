@@ -4,7 +4,7 @@ export const zonesStyle = {
   source: "zones",
   paint: {
     "line-color": "black",
-    "line-width": 2,
+    "line-width": 0.75,
   },
 };
 

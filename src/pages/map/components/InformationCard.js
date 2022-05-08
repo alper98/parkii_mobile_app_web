@@ -13,6 +13,7 @@ export function InformationCard({ zones }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!zones) return;
     if (
       currentZone &&
       turf.booleanPointInPolygon(
