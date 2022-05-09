@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import mapService from "../../api/mapService";
 
 // First, create the thunk
@@ -6,15 +7,21 @@ export const fetchRestrictions = createAsyncThunk(
   "maps/restrictions",
   async (coords, thunkAPI) => {
     const { latitude, longitude, distance } = coords;
+    if (!thunkAPI.getState().map?.restrictions) {
+      thunkAPI.dispatch(setMapLoading(true));
+    }
     const response = await mapService.getRestrictions(
       latitude,
       longitude,
       distance
     );
     if (!response) {
+      toast.info("We found no restrictions in your area");
+      thunkAPI.dispatch(setMapLoading(false));
       thunkAPI.dispatch(setRestrictions(null));
     }
     thunkAPI.dispatch(setRestrictions(response.restrictions));
+    thunkAPI.dispatch(setMapLoading(false));
     const currentViewState = thunkAPI.getState().map.viewState;
     thunkAPI.dispatch(setStartingCoords(currentViewState));
   }
@@ -88,6 +95,9 @@ export const mapSlice = createSlice({
     setCurrentZone: (state, action) => {
       state.currentZone = action.payload;
     },
+    setMapLoading: (state, action) => {
+      state.mapLoading = action.payload;
+    },
     setRestrictions: (state, action) => {
       state.restrictions = { ...state.restrictions, ...action.payload };
     },
@@ -101,6 +111,7 @@ export const {
   setRestrictions,
   setCurrentZone,
   setStartingCoords,
+  setMapLoading,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

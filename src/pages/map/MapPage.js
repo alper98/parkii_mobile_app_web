@@ -29,7 +29,7 @@ export default function MapPage() {
   const radius = useSelector((s) => s.user.settings.radius);
   const viewState = useSelector((s) => s.map.viewState);
   const startingCoords = useSelector((s) => s.map.startingCoords);
-  const [isLoading, setIsLoading] = useState(true);
+  const mapLoading = useSelector((s) => s.map.mapLoading);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,7 +41,6 @@ export default function MapPage() {
           distance: radius,
         })
       );
-      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -68,7 +67,7 @@ export default function MapPage() {
     fetchData();
   }, [viewState.latitude, viewState.longitude]);
 
-  if (isLoading)
+  if (mapLoading)
     return (
       <Typography variant="h5" textAlign={"center"}>
         <Lottie
@@ -106,14 +105,14 @@ export default function MapPage() {
             );
           }}
         />
-        {!isLoading && zones?.features && (
+        {!mapLoading && zones?.features && (
           <MapLayer
             data={zones}
             dataStyle={zonesStyle}
             dataTextStyle={zonesTextStyle}
           />
         )}
-        {!isLoading && restrictions?.features && (
+        {!mapLoading && restrictions?.features && (
           <MapLayer
             data={restrictions}
             dataStyle={restrictionsStyle}

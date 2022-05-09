@@ -74,7 +74,6 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
               name="password"
               label="Password"
               type="password"
-              value={12345678}
               fullWidth
               margin="normal"
               {...register("password")}
@@ -83,7 +82,6 @@ export default function SignUpComponent({ handleLoginSignUp, handleSignUp }) {
             />
             <TextField
               required
-              value={12345678}
               id="confirmPassword"
               name="confirmPassword"
               label="Confirm Password"

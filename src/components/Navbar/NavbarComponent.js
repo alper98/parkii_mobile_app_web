@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { setUser } from "../../redux/features/userSlice";
+import { logout, setUser } from "../../redux/features/userSlice";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
@@ -37,10 +37,9 @@ const NavbarComponent = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    dispatch(setUser(null));
+    dispatch(logout());
     setAnchorElUser(null);
     navigate("/login");
-    toast.info("Logged out");
   };
 
   const handleClickDesktopMenu = (path) => {

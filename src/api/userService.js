@@ -1,5 +1,4 @@
 import api from "./ApiClient";
-import { toast } from "react-toastify";
 
 class UserService {
   get = async () => {
@@ -10,24 +9,12 @@ class UserService {
     } catch (error) {
       if (error.response) {
         return error.response.data.message;
-      } else {
-        console.log(error);
       }
     }
   };
+
   create = async (data) => {
-    const response = await toast.promise(api.post("/register", data), {
-      pending: `Creaing ${data.name}...`,
-      success: `${data.name} has been created!`,
-      error: {
-        render({ data }) {
-          return data.response.data.message;
-        },
-      },
-    });
-    if (response.status !== 200) {
-      return false;
-    }
+    const response = await api.post("/register", data);
     localStorage.setItem("access_token", response?.data?.access_token);
     return {
       access_token: response?.data?.access_token,
@@ -36,32 +23,14 @@ class UserService {
   };
 
   update = async (id, data) => {
-    const response = await toast.promise(api.put(`/users/${id}`, data), {
-      success: `Updated profile!`,
-      error: {
-        render({ data }) {
-          return data.response.data.message;
-        },
-      },
-    });
+    const response = await api.put(`/users/${id}`, data);
     if (response.data.user) {
       return { user: response.data.user };
     }
   };
 
   delete = async (id) => {
-    const response = await toast.promise(api.delete(`/users/${id}`), {
-      success: {
-        render({ data }) {
-          return data.data.message;
-        },
-      },
-      error: {
-        render({ data }) {
-          return data.response.data.message;
-        },
-      },
-    });
+    const response = await api.delete(`/users/${id}`);
     if (response) {
       return true;
     }

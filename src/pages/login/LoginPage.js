@@ -2,10 +2,9 @@ import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../../api/authService";
-import UserService from "../../api/userService";
+import { toast } from "react-toastify";
 import { getUserLocation } from "../../redux/features/mapSlice";
-import { setUser } from "../../redux/features/userSlice";
+import { create, login } from "../../redux/features/userSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
@@ -20,23 +19,18 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (email, password) => {
-    const response = await AuthService.login(email, password);
-    if (response?.user) {
-      await dispatch(setUser(response.user));
-    }
+    await dispatch(login({ email, password }));
   };
 
   const handleSignUp = async (data) => {
-    const response = await UserService.create(data);
-    if (response?.user) {
-      await dispatch(setUser(response.user));
-    }
+    await dispatch(create(data));
   };
 
   useEffect(() => {
     async function fetchData() {
       if (user) {
-        await dispatch(getUserLocation());
+        toast.info(`Welcome back, ${user.name}`);
+        dispatch(getUserLocation());
         navigate("/profile");
       } else {
         navigate("/login");

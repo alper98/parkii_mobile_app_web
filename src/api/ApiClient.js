@@ -29,14 +29,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     if (response.status === 401) {
-      alert("You are not authorized");
+      console.log("Fejl 401");
     }
     return response;
   },
   (error) => {
     if (error.response && error.response.data) {
-      toast.error("Session expired - Log in again");
-      store.dispatch(setUser(null));
+      if (error?.response?.data?.message === "Unauthenticated.") {
+        store.dispatch(setUser(null));
+      }
       return Promise.reject(error.response.data);
     }
     return Promise.reject(error.message);
