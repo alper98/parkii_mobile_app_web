@@ -23,11 +23,10 @@ root.render(
       position="top-right"
       limit={1}
       autoClose={1250}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
+      pauseOnHover={false}
+      pauseOnFocusLoss={false}
       rtl={false}
-      draggable
+      draggable={false}
     />
   </React.StrictMode>
 );

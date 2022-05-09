@@ -5,12 +5,16 @@ import Typography from "@mui/material/Typography";
 import * as turf from "@turf/turf";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentZone } from "../../../redux/features/mapSlice";
+import {
+  fetchRestrictions,
+  setCurrentZone,
+} from "../../../redux/features/mapSlice";
 
 export function InformationCard({ zones }) {
   const viewState = useSelector((s) => s.map.viewState);
   const currentZone = useSelector((s) => s.map.currentZone);
   const dispatch = useDispatch();
+  const radius = useSelector((s) => s.user.settings.radius);
 
   useEffect(() => {
     if (!zones) return;
@@ -32,6 +36,13 @@ export function InformationCard({ zones }) {
         )
       ) {
         dispatch(setCurrentZone(zone));
+        dispatch(
+          fetchRestrictions({
+            latitude: viewState.latitude,
+            longitude: viewState.longitude,
+            distance: radius,
+          })
+        );
         break;
       }
     }
@@ -51,7 +62,7 @@ export function InformationCard({ zones }) {
             {currentZone ? (
               <>{currentZone.properties.beskrivelse} </>
             ) : (
-              "Ingen zone fundet"
+              "Restrictions only available in Copenhagen"
             )}
           </Typography>
         </CardContent>

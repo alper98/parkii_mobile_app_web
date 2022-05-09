@@ -15,9 +15,10 @@ export const fetchRestrictions = createAsyncThunk(
       longitude,
       distance
     );
+
     if (!response) {
-      toast.info("We found no restrictions in your area");
       thunkAPI.dispatch(setMapLoading(false));
+      toast.info("We found no restrictions in your area");
       thunkAPI.dispatch(setRestrictions(null));
     }
     thunkAPI.dispatch(setRestrictions(response.restrictions));

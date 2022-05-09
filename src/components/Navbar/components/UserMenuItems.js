@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { fetchRestrictions } from "../../../redux/features/mapSlice";
 import { setSettings } from "../../../redux/features/userSlice";
 import { SettingsDialog } from "./SettingsDialog";
@@ -19,7 +20,9 @@ export function UserMenuItems({
   const radius = useSelector((s) => s.user.settings.radius);
   const viewState = useSelector((s) => s.map.viewState);
 
+  const location = useLocation();
   const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -28,13 +31,15 @@ export function UserMenuItems({
   };
 
   const handleClose = () => {
-    dispatch(
-      fetchRestrictions({
-        longitude: viewState.longitude,
-        latitude: viewState.latitude,
-        distance: radius,
-      })
-    );
+    if (location.pathname === "/map") {
+      dispatch(
+        fetchRestrictions({
+          longitude: viewState.longitude,
+          latitude: viewState.latitude,
+          distance: radius,
+        })
+      );
+    }
     setOpen(false);
   };
 
