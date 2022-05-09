@@ -19,17 +19,16 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (email, password) => {
-    await dispatch(login({ email, password }));
+    dispatch(login({ email, password }));
   };
 
   const handleSignUp = async (data) => {
-    await dispatch(create(data));
+    dispatch(create(data));
   };
 
   useEffect(() => {
     async function fetchData() {
       if (user) {
-        toast.info(`Welcome back, ${user.name}`);
         dispatch(getUserLocation());
         navigate("/profile");
       } else {
