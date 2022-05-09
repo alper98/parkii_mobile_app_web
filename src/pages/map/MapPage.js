@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Typography from "@mui/material/Typography";
-import { useEffect, useRef, useState } from "react";
+import { distanceTo } from "geolocation-utils";
+import { useEffect, useRef } from "react";
 import Lottie from "react-lottie";
 import Map, { GeolocateControl } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +19,6 @@ import {
   zonesStyle,
   zonesTextStyle,
 } from "./components/MapStyle";
-import { distanceTo } from "geolocation-utils";
 
 export default function MapPage() {
   const mapRef = useRef();
