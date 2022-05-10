@@ -1,17 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import authService from "../../api/authService";
 import userService from "../../api/userService";
 
+export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
+  const response = await userService.get();
+  if (!response) {
+    thunkAPI.dispatch(setUser(null));
+    return null;
+  }
+  thunkAPI.dispatch(setUser(response.user));
+  return response.user;
+});
+
 export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
   const { email, password } = data;
   const response = await toast.promise(authService.login(email, password), {
-    success: {
-      render({ data }) {
-        return `Welcome back, ${data.user.name.split(" ")[0]}`;
-      },
-    },
     error: {
       render({ data }) {
         return data.message;
@@ -20,8 +24,10 @@ export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
   });
   if (!response) {
     thunkAPI.dispatch(setUser(null));
+    return null;
   }
   thunkAPI.dispatch(setUser(response.user));
+  return response.user;
 });
 
 export const create = createAsyncThunk(
@@ -37,8 +43,10 @@ export const create = createAsyncThunk(
     });
     if (!response) {
       thunkAPI.dispatch(setUser(null));
+      return null;
     }
     thunkAPI.dispatch(setUser(response.user));
+    return response.user;
   }
 );
 
@@ -78,9 +86,11 @@ export const deleteUser = createAsyncThunk(
       }
     );
     if (!response) {
+      localStorage.removeItem("access_token");
       thunkAPI.dispatch(setUser(null));
     }
-    thunkAPI.dispatch(setUser(response.user));
+    localStorage.removeItem("access_token");
+    thunkAPI.dispatch(setUser(null));
   }
 );
 
@@ -93,6 +103,7 @@ export const logout = createAsyncThunk("user/logout", async (_, thunkAPI) => {
 const initialState = {
   userStyle: "userbox://styles/userbox/streets-v9",
   user: null,
+  userLoading: false,
   settings: {
     radius: localStorage.getItem("settings") ?? 500,
   },
@@ -104,6 +115,8 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+      state.userLoading = false;
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setSettings: (state, action) => {
       state.settings = { ...state.settings, ...action.payload };

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../../redux/features/userSlice";
 import { validationSchema } from "../util/ProfileUtils";
+
 export default function ProfileTextFields() {
   const {
     register,

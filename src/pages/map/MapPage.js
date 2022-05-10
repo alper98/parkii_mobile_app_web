@@ -76,7 +76,6 @@ export default function MapPage() {
     fetchData();
   }, [coordinates.latitude, coordinates.longitude]);
 
-
   if (mapLoading)
     return (
       <Typography variant="h5" textAlign={"center"}>

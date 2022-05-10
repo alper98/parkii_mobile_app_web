@@ -36,6 +36,8 @@ export function InformationCard({ zones }) {
         )
       ) {
         dispatch(setCurrentZone(zone));
+        console.log(zone);
+        console.log(currentZone);
         dispatch(
           fetchRestrictions({
             latitude: coordinates.latitude,
@@ -46,7 +48,7 @@ export function InformationCard({ zones }) {
         break;
       }
     }
-  }, [coordinates]);
+  }, [coordinates.longitude, coordinates.latitude]);
 
   return (
     <Grid

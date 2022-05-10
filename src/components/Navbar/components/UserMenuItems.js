@@ -5,11 +5,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSettings } from "../../../redux/features/userSlice";
-import { SettingsDialog } from "./SettingsDialog";
-import { logout } from "../../../redux/features/userSlice";
-import { fetchRestrictions } from "../../../redux/features/mapSlice";
 import { useLocation } from "react-router-dom";
+import { fetchRestrictions } from "../../../redux/features/mapSlice";
+import { logout, setSettings } from "../../../redux/features/userSlice";
+import { SettingsDialog } from "./SettingsDialog";
 
 export function UserMenuItems({ handleOpenUserMenu, isUserMenuOpen }) {
   const user = useSelector((s) => s.user.user);
@@ -55,7 +54,11 @@ export function UserMenuItems({ handleOpenUserMenu, isUserMenuOpen }) {
             p: 0,
           }}
         >
-          <Avatar alt={user.name} src="/static/images/avatar/2.jpg" />
+          <Avatar
+            alt={user.name}
+            sx={{ backgroundColor: "white", color: "black" }}
+            src="/static/images/avatar/2.jpg"
+          />
         </IconButton>
       </Tooltip>
       <Menu

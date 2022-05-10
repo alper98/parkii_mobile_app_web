@@ -5,7 +5,6 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
 import { UserMenuItems } from "./components/UserMenuItems";
 
@@ -33,31 +32,14 @@ const NavbarComponent = () => {
     <AppBar position="static" sx={{ height: "100%", justifyContent: "center" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <DriveEtaIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".1rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Parkii.dk
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <DriveEtaIcon sx={{ display: { xs: "none" }, mr: 1 }} />
+          <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
             <MobileMenuItems
               handleOpenNavMenu={handleOpenNavMenu}
               isNavOpen={isNavOpen}
             />
           </Box>
-          <DriveEtaIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <DriveEtaIcon sx={{ display: { xs: "flex" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -65,7 +47,7 @@ const NavbarComponent = () => {
             href=""
             sx={{
               mr: 2,
-              display: { xs: "flex", md: "none" },
+              display: { xs: "flex" },
               flexGrow: 1,
               fontFamily: "monospace",
               fontWeight: 700,
@@ -76,9 +58,7 @@ const NavbarComponent = () => {
           >
             Parkii.dk
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <DesktopMenuItems handleOpenUserMenu={handleOpenUserMenu} />
-          </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <UserMenuItems
               handleOpenUserMenu={handleOpenUserMenu}
