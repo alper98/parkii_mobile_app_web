@@ -1,16 +1,17 @@
 import LinkedCameraIcon from "@mui/icons-material/LinkedCamera";
 import MapIcon from "@mui/icons-material/Map";
 import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
 import Button from "@mui/material/Button";
 
-export function DesktopMenuItems({ handleClickDesktopMenu }) {
+export function DesktopMenuItems({ handleClickDesktopMenu, handleClickOpen }) {
   return (
     <>
       <Button
         onClick={() => handleClickDesktopMenu("/profile")}
         sx={{
           my: 2,
-          color: "white",
+          color: "black",
           display: "block",
         }}
       >
@@ -21,7 +22,7 @@ export function DesktopMenuItems({ handleClickDesktopMenu }) {
         onClick={() => handleClickDesktopMenu("/camera")}
         sx={{
           my: 2,
-          color: "white",
+          color: "black",
           display: "block",
         }}
       >
@@ -32,12 +33,23 @@ export function DesktopMenuItems({ handleClickDesktopMenu }) {
         onClick={() => handleClickDesktopMenu("/map")}
         sx={{
           my: 2,
-          color: "white",
+          color: "black",
           display: "block",
         }}
       >
         <MapIcon fontSize="large" style={{ marginRight: 7 }} />
         Map
+      </Button>
+      <Button
+        onClick={handleClickOpen}
+        sx={{
+          my: 2,
+          color: "black",
+          display: "block",
+        }}
+      >
+        <SettingsIcon fontSize="large" style={{ marginRight: 7 }} />
+        Settings
       </Button>
     </>
   );

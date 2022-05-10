@@ -1,4 +1,3 @@
-import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import { useEffect } from "react";
@@ -6,7 +5,6 @@ import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import userService from "./api/userService";
-import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import CameraPage from "./pages/camera/CameraPage";
 import LoginPage from "./pages/login/LoginPage";
@@ -15,6 +13,7 @@ import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import { getUserLocation } from "./redux/features/mapSlice";
 import { setUser } from "./redux/features/userSlice";
+import "./App.css";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -40,17 +39,13 @@ const ProtectedRoute = () => {
 };
 
 function App() {
-  const height = use100vh();
+  const realHeight = use100vh();
+  const user = useSelector((s) => s.user.user);
 
   return (
-    <Grid container direction="column">
-      <NavbarComponent />
-      <Box
-        sx={{
-          height: height,
-          maxHeight: height,
-        }}
-      >
+    <Box sx={{ height: realHeight }}>
+      <Grid sx={{ height: "7%" }}>{user && <NavbarComponent />}</Grid>
+      <Grid sx={{ height: "93%" }}>
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -60,8 +55,8 @@ function App() {
             <Route path="/map" element={<MapPage />} />
           </Route>
         </Routes>
-      </Box>
-    </Grid>
+      </Grid>
+    </Box>
   );
 }
 

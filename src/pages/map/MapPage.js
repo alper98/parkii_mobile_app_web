@@ -76,19 +76,6 @@ export default function MapPage() {
     fetchData();
   }, [coordinates.latitude, coordinates.longitude]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      dispatch(
-        setCoordinates({
-          longitude: 12.550212407204201,
-          latitude: 55.67818764755417,
-        })
-      );
-    }, 3000);
-    return function cleanup() {
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   if (mapLoading)
     return (

@@ -1,43 +1,40 @@
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/features/userSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { fetchRestrictions } from "../../redux/features/mapSlice";
+import { logout, setSettings } from "../../redux/features/userSlice";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";
-import { UserMenuItems } from "./components/UserMenuItems";
+import { SettingsDialog } from "./components/SettingsDialog";
 
 const NavbarComponent = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
   const dispatch = useDispatch();
-  const user = useSelector((s) => s.user.user);
+  const radius = useSelector((s) => s.user.settings.radius);
+  const coordinates = useSelector((s) => s.map.coordinates);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     dispatch(logout());
-    setAnchorElUser(null);
     navigate("/login");
   };
 
@@ -45,44 +42,75 @@ const NavbarComponent = () => {
     navigate(path);
   };
 
+  const handleClickOpen = () => {
+    handleCloseNavMenu();
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    if (location.pathname === "/map") {
+      dispatch(
+        fetchRestrictions({
+          longitude: coordinates.longitude,
+          latitude: coordinates.latitude,
+          distance: radius,
+        })
+      );
+    }
+    setOpen(false);
+  };
+
+  const handleInputChange = (event) => {
+    localStorage.setItem("settings", radius);
+    dispatch(
+      setSettings({
+        radius: event.target.value === "" ? "" : Number(event.target.value),
+      })
+    );
+  };
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "white", color: "black" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {user && (
-            <>
-              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                <MobileMenuItems
-                  handleOpenNavMenu={handleOpenNavMenu}
-                  anchorElNav={anchorElNav}
-                  handleCloseNavMenu={handleCloseNavMenu}
-                />
-              </Box>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ mr: 2, display: { md: "flex" } }}
+          <>
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <MobileMenuItems
+                handleOpenNavMenu={handleOpenNavMenu}
+                anchorElNav={anchorElNav}
+                handleCloseNavMenu={handleCloseNavMenu}
+                handleClickOpen={handleClickOpen}
+                handleLogout={handleLogout}
+              />
+            </Box>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              <DesktopMenuItems
+                handleClickDesktopMenu={handleClickDesktopMenu}
+                handleClickOpen={handleClickOpen}
+              />
+            </Box>
+            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  my: 2,
+                  color: "black",
+                }}
               >
-                Parkii.dk
-              </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                <DesktopMenuItems
-                  handleClickDesktopMenu={handleClickDesktopMenu}
-                />
-              </Box>
-              <Box sx={{ flexGrow: 0 }}>
-                <UserMenuItems
-                  handleOpenUserMenu={handleOpenUserMenu}
-                  anchorElUser={anchorElUser}
-                  handleCloseUserMenu={handleCloseUserMenu}
-                  handleLogout={handleLogout}
-                />
-              </Box>
-            </>
-          )}
+                <LogoutIcon fontSize="large" style={{ marginRight: 7 }} />
+                Logout
+              </Button>
+            </Box>
+          </>
         </Toolbar>
       </Container>
+      <SettingsDialog
+        open={open}
+        handleClose={handleClose}
+        Number={Number}
+        radius={radius}
+        handleInputChange={handleInputChange}
+      />
     </AppBar>
   );
 };

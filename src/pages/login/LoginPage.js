@@ -30,7 +30,7 @@ export default function LoginPage() {
     async function fetchData() {
       if (user) {
         dispatch(getUserLocation());
-        navigate("/profile");
+        navigate("/map");
       } else {
         navigate("/login");
       }

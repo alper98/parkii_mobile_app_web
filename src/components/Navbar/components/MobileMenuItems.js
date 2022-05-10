@@ -1,14 +1,19 @@
 import LinkedCameraIcon from "@mui/icons-material/LinkedCamera";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MapIcon from "@mui/icons-material/Map";
 import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+
 export function MobileMenuItems({
   handleOpenNavMenu,
   anchorElNav,
   handleCloseNavMenu,
+  handleClickOpen,
+  handleLogout,
 }) {
   return (
     <>
@@ -60,6 +65,18 @@ export function MobileMenuItems({
             <MapIcon />
           </IconButton>
           Map
+        </MenuItem>
+        <MenuItem onClick={handleClickOpen}>
+          <IconButton size="large">
+            <SettingsIcon />
+          </IconButton>
+          Settings
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <IconButton size="large">
+            <LogoutIcon />
+          </IconButton>
+          Logout
         </MenuItem>
       </Menu>
     </>

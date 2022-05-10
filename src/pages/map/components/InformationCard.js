@@ -1,4 +1,4 @@
-import { CardActionArea } from "@mui/material";
+import { Grid } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -49,24 +49,33 @@ export function InformationCard({ zones }) {
   }, [coordinates]);
 
   return (
-    <Card
-      className="mgl-map-overlay"
+    <Grid
+      container
       sx={{
-        minWidth: "100%",
-        minHeight: "50px",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <CardActionArea>
+      <Card
+        className="mgl-map-overlay"
+        sx={{
+          width: "95%",
+          height: "100px",
+          position: "absolute",
+          bottom: 20,
+          opacity: "90%",
+        }}
+      >
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {currentZone ? (
-              <>{currentZone.properties.beskrivelse} </>
+              <>Current zone: {currentZone.properties.beskrivelse} </>
             ) : (
               "Restrictions only available in Copenhagen"
             )}
           </Typography>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </Card>
+    </Grid>
   );
 }
