@@ -23,8 +23,8 @@ export const fetchRestrictions = createAsyncThunk(
     }
     thunkAPI.dispatch(setRestrictions(response.restrictions));
     thunkAPI.dispatch(setMapLoading(false));
-    const currentViewState = thunkAPI.getState().map.viewState;
-    thunkAPI.dispatch(setStartingCoords(currentViewState));
+    const currentViewState = thunkAPI.getState().map.coordinates;
+    thunkAPI.dispatch(setCoordinatesLastFetch(currentViewState));
   }
 );
 export const fetchZones = createAsyncThunk(
@@ -44,13 +44,13 @@ export const getUserLocation = createAsyncThunk(
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition((pos) => {
         thunkAPI.dispatch(
-          setViewState({
+          setCoordinates({
             longitude: pos.coords.longitude,
             latitude: pos.coords.latitude,
           })
         );
         thunkAPI.dispatch(
-          setStartingCoords({
+          setCoordinatesLastFetch({
             longitude: pos.coords.longitude,
             latitude: pos.coords.latitude,
           })
@@ -65,12 +65,12 @@ export const getUserLocation = createAsyncThunk(
 const initialState = {
   mapStyle: "mapbox://styles/mapbox/streets-v9",
   mapLoading: false,
-  viewState: {
+  coordinates: {
     latitude: 55.676098,
     longitude: 12.568337,
     zoom: 12,
   },
-  startingCoords: {
+  coordinatesLastFetch: {
     latitude: 55.6897960048817,
     longitude: 12.555729340168238,
     zoom: 12,
@@ -84,11 +84,14 @@ export const mapSlice = createSlice({
   name: "map",
   initialState,
   reducers: {
-    setViewState: (state, action) => {
-      state.viewState = { ...state.viewState, ...action.payload };
+    setCoordinates: (state, action) => {
+      state.coordinates = { ...state.coordinates, ...action.payload };
     },
-    setStartingCoords: (state, action) => {
-      state.startingCoords = { ...state.startingCoords, ...action.payload };
+    setCoordinatesLastFetch: (state, action) => {
+      state.coordinatesLastFetch = {
+        ...state.coordinatesLastFetch,
+        ...action.payload,
+      };
     },
     setZones: (state, action) => {
       state.zones = { ...state.zones, ...action.payload };
@@ -107,11 +110,11 @@ export const mapSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  setViewState,
+  setCoordinates,
   setZones,
   setRestrictions,
   setCurrentZone,
-  setStartingCoords,
+  setCoordinatesLastFetch,
   setMapLoading,
 } = mapSlice.actions;
 

@@ -18,7 +18,7 @@ export function UserMenuItems({
 }) {
   const user = useSelector((s) => s.user.user);
   const radius = useSelector((s) => s.user.settings.radius);
-  const viewState = useSelector((s) => s.map.viewState);
+  const coordinates = useSelector((s) => s.map.coordinates);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -34,8 +34,8 @@ export function UserMenuItems({
     if (location.pathname === "/map") {
       dispatch(
         fetchRestrictions({
-          longitude: viewState.longitude,
-          latitude: viewState.latitude,
+          longitude: coordinates.longitude,
+          latitude: coordinates.latitude,
           distance: radius,
         })
       );

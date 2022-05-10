@@ -1,4 +1,6 @@
+import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { Box } from "@mui/system";
 import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,12 +41,16 @@ const ProtectedRoute = () => {
 
 function App() {
   const height = use100vh();
-  const halfHeight = height ? height * 0.9 : "90vh";
 
   return (
     <Grid container direction="column">
       <NavbarComponent />
-      <Grid style={{ height: halfHeight }}>
+      <Box
+        sx={{
+          height: height,
+          maxHeight: height,
+        }}
+      >
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -54,7 +60,7 @@ function App() {
             <Route path="/map" element={<MapPage />} />
           </Route>
         </Routes>
-      </Grid>
+      </Box>
     </Grid>
   );
 }

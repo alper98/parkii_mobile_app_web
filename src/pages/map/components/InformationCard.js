@@ -11,7 +11,7 @@ import {
 } from "../../../redux/features/mapSlice";
 
 export function InformationCard({ zones }) {
-  const viewState = useSelector((s) => s.map.viewState);
+  const coordinates = useSelector((s) => s.map.coordinates);
   const currentZone = useSelector((s) => s.map.currentZone);
   const dispatch = useDispatch();
   const radius = useSelector((s) => s.user.settings.radius);
@@ -21,7 +21,7 @@ export function InformationCard({ zones }) {
     if (
       currentZone &&
       turf.booleanPointInPolygon(
-        [viewState.longitude, viewState.latitude],
+        [coordinates.longitude, coordinates.latitude],
         currentZone.geometry
       )
     ) {
@@ -31,29 +31,29 @@ export function InformationCard({ zones }) {
     for (let zone of zones.features) {
       if (
         turf.booleanPointInPolygon(
-          [viewState.longitude, viewState.latitude],
+          [coordinates.longitude, coordinates.latitude],
           zone.geometry
         )
       ) {
         dispatch(setCurrentZone(zone));
         dispatch(
           fetchRestrictions({
-            latitude: viewState.latitude,
-            longitude: viewState.longitude,
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
             distance: radius,
           })
         );
         break;
       }
     }
-  }, [viewState]);
+  }, [coordinates]);
 
   return (
     <Card
       className="mgl-map-overlay"
       sx={{
         minWidth: "100%",
-        minHeight: "10%",
+        minHeight: "50px",
       }}
     >
       <CardActionArea>
