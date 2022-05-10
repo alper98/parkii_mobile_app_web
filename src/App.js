@@ -1,9 +1,13 @@
 import Grid from "@mui/material/Grid";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { use100vh } from "react-div-100vh";
+import Lottie from "react-lottie";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import * as spinner from "./lotties/spinner.json";
 import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -15,10 +19,16 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import { getUserLocation } from "./redux/features/mapSlice";
 import { setUser } from "./redux/features/userSlice";
 
-const ProtectedRoute = () => {
-  const location = useLocation();
+const ProtectedRoutes = ({ user }) => {
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
+};
+
+function App() {
+  const realHeight = use100vh();
   const user = useSelector((s) => s.user.user);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchUser() {
@@ -31,25 +41,24 @@ const ProtectedRoute = () => {
     fetchUser();
   }, []);
 
-  return user ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
-  );
-};
-
-function App() {
-  const realHeight = use100vh();
-  const user = useSelector((s) => s.user.user);
+  useEffect(() => {
+    async function fetchData() {
+      if (user) {
+        dispatch(getUserLocation());
+        navigate("/profile");
+      }
+    }
+    fetchData();
+  }, [user]);
 
   return (
     <Box sx={{ height: realHeight }}>
-      <Grid sx={{ height: "6%" }}>{user && <NavbarComponent />}</Grid>
-      <Grid sx={{ height: "94%" }}>
+      <Grid sx={{ height: "8%" }}>{user && <NavbarComponent />}</Grid>
+      <Grid sx={{ height: "92%" }}>
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoutes user={user} />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/camera" element={<CameraPage />} />
             <Route path="/map" element={<MapPage />} />

@@ -1,18 +1,13 @@
 import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { getUserLocation } from "../../redux/features/mapSlice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { create, login } from "../../redux/features/userSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";
 
 export default function LoginPage() {
   const [isLogIn, setIsLogIn] = useState(true);
-  const user = useSelector((s) => s.user.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleLoginSignUp = () => {
     setIsLogIn(!isLogIn);
@@ -25,18 +20,6 @@ export default function LoginPage() {
   const handleSignUp = async (data) => {
     dispatch(create(data));
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      if (user) {
-        dispatch(getUserLocation());
-        navigate("/map");
-      } else {
-        navigate("/login");
-      }
-    }
-    fetchData();
-  }, [user]);
 
   return (
     <Grid
