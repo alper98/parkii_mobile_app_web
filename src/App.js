@@ -1,13 +1,9 @@
 import Grid from "@mui/material/Grid";
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { use100vh } from "react-div-100vh";
-import Lottie from "react-lottie";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import * as spinner from "./lotties/spinner.json";
 import userService from "./api/userService";
 import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
@@ -26,7 +22,6 @@ const ProtectedRoutes = ({ user }) => {
 function App() {
   const realHeight = use100vh();
   const user = useSelector((s) => s.user.user);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
