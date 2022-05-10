@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import authService from "../../api/authService";
 import userService from "../../api/userService";
@@ -84,6 +85,7 @@ export const deleteUser = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("user/logout", async (_, thunkAPI) => {
+  localStorage.removeItem("access_token");
   thunkAPI.dispatch(setUser(null));
   toast.info("Logged out");
 });

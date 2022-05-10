@@ -1,16 +1,14 @@
 import LinkedCameraIcon from "@mui/icons-material/LinkedCamera";
-import LogoutIcon from "@mui/icons-material/Logout";
 import MapIcon from "@mui/icons-material/Map";
 import MenuIcon from "@mui/icons-material/Menu";
-import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+
 export function MobileMenuItems({
   handleOpenNavMenu,
-  anchorElNav,
-  handleCloseNavMenu,
+  isNavOpen,
   handleClickOpen,
   handleLogout,
 }) {
@@ -28,7 +26,7 @@ export function MobileMenuItems({
       </IconButton>
       <Menu
         id="menu-appbar"
-        anchorEl={anchorElNav}
+        anchorEl={isNavOpen}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -38,8 +36,8 @@ export function MobileMenuItems({
           vertical: "top",
           horizontal: "left",
         }}
-        open={Boolean(anchorElNav)}
-        onClose={handleCloseNavMenu}
+        open={Boolean(isNavOpen)}
+        onClose={handleOpenNavMenu}
         sx={{
           display: {
             xs: "block",
@@ -47,35 +45,23 @@ export function MobileMenuItems({
           },
         }}
       >
-        <MenuItem component={Link} to={`/profile`} onClick={handleCloseNavMenu}>
+        <MenuItem component={Link} to={`/profile`} onClick={handleOpenNavMenu}>
           <IconButton size="large">
             <MenuIcon />
           </IconButton>
           Profile
         </MenuItem>
-        <MenuItem component={Link} to={`/camera`} onClick={handleCloseNavMenu}>
+        <MenuItem component={Link} to={`/camera`} onClick={handleOpenNavMenu}>
           <IconButton size="large">
             <LinkedCameraIcon />
           </IconButton>
           Camera
         </MenuItem>
-        <MenuItem component={Link} to={`/map`} onClick={handleCloseNavMenu}>
+        <MenuItem component={Link} to={`/map`} onClick={handleOpenNavMenu}>
           <IconButton size="large">
             <MapIcon />
           </IconButton>
           Map
-        </MenuItem>
-        <MenuItem onClick={handleClickOpen}>
-          <IconButton size="large">
-            <SettingsIcon />
-          </IconButton>
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <IconButton size="large">
-            <LogoutIcon />
-          </IconButton>
-          Logout
         </MenuItem>
       </Menu>
     </>

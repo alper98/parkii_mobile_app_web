@@ -3,15 +3,18 @@ import MapIcon from "@mui/icons-material/Map";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
-export function DesktopMenuItems({ handleClickDesktopMenu, handleClickOpen }) {
+export function DesktopMenuItems({ handleOpenUserMenu }) {
+  const navigate = useNavigate();
+
   return (
     <>
       <Button
-        onClick={() => handleClickDesktopMenu("/profile")}
+        onClick={() => navigate("/profile")}
         sx={{
           my: 2,
-          color: "black",
+          color: "white",
           display: "block",
         }}
       >
@@ -19,10 +22,10 @@ export function DesktopMenuItems({ handleClickDesktopMenu, handleClickOpen }) {
         Profile
       </Button>
       <Button
-        onClick={() => handleClickDesktopMenu("/camera")}
+        onClick={() => navigate("/camera")}
         sx={{
           my: 2,
-          color: "black",
+          color: "white",
           display: "block",
         }}
       >
@@ -30,10 +33,10 @@ export function DesktopMenuItems({ handleClickDesktopMenu, handleClickOpen }) {
         Camera
       </Button>
       <Button
-        onClick={() => handleClickDesktopMenu("/map")}
+        onClick={() => navigate("/map")}
         sx={{
           my: 2,
-          color: "black",
+          color: "white",
           display: "block",
         }}
       >
@@ -41,10 +44,10 @@ export function DesktopMenuItems({ handleClickDesktopMenu, handleClickOpen }) {
         Map
       </Button>
       <Button
-        onClick={handleClickOpen}
+        onClick={handleOpenUserMenu}
         sx={{
           my: 2,
-          color: "black",
+          color: "white",
           display: "block",
         }}
       >
