@@ -8,12 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSettings } from "../../../redux/features/userSlice";
 import { SettingsDialog } from "./SettingsDialog";
 import { logout } from "../../../redux/features/userSlice";
+import { fetchRestrictions } from "../../../redux/features/mapSlice";
+import { useLocation } from "react-router-dom";
 
 export function UserMenuItems({ handleOpenUserMenu, isUserMenuOpen }) {
   const user = useSelector((s) => s.user.user);
   const radius = useSelector((s) => s.user.settings.radius);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const coordinates = useSelector((s) => s.map.coordinates);
+  const location = useLocation();
 
   const handleClickOpen = () => {
     handleOpenUserMenu();
@@ -21,6 +25,15 @@ export function UserMenuItems({ handleOpenUserMenu, isUserMenuOpen }) {
   };
 
   const handleClose = () => {
+    if (location.pathname === "/map") {
+      dispatch(
+        fetchRestrictions({
+          longitude: coordinates.longitude,
+          latitude: coordinates.latitude,
+          distance: radius,
+        })
+      );
+    }
     setOpen(false);
   };
 

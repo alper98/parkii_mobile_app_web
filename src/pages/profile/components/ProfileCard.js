@@ -10,10 +10,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import { format, parseISO } from "date-fns";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUser } from "../../../redux/features/userSlice";
 
-export default function ProfileCard({ handleDelete }) {
+export default function ProfileCard() {
   const user = useSelector((s) => s.user.user);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -69,7 +71,12 @@ export default function ProfileCard({ handleDelete }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} autoFocus>
+          <Button
+            onClick={() => {
+              dispatch(deleteUser());
+            }}
+            autoFocus
+          >
             Yes, delete
           </Button>
         </DialogActions>

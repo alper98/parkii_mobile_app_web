@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
 import { useState } from "react";
 import { DesktopMenuItems } from "./components/DesktopMenuItems";
 import { MobileMenuItems } from "./components/MobileMenuItems";

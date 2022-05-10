@@ -1,10 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Container, TextField } from "@material-ui/core";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { update } from "../../../redux/features/userSlice";
 import { validationSchema } from "../util/ProfileUtils";
-
-export default function ProfileTextFields({ handleUpdate }) {
+export default function ProfileTextFields() {
   const {
     register,
     handleSubmit,
@@ -12,6 +12,8 @@ export default function ProfileTextFields({ handleUpdate }) {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
+  const dispatch = useDispatch();
 
   const user = useSelector((s) => s.user.user);
 
@@ -21,7 +23,7 @@ export default function ProfileTextFields({ handleUpdate }) {
         delete data[key];
       }
     }
-    handleUpdate(data);
+    dispatch(update(data));
   };
 
   return (
