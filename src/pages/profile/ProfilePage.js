@@ -24,6 +24,7 @@ export default function ProfilePage() {
           marginTop: 5,
           flexDirection: "column",
           alignItems: "center",
+          textAlign: "center",
         }}
       >
         <Box>

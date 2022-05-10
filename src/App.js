@@ -5,6 +5,7 @@ import { use100vh } from "react-div-100vh";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import userService from "./api/userService";
+import "./App.css";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import CameraPage from "./pages/camera/CameraPage";
 import LoginPage from "./pages/login/LoginPage";
@@ -13,7 +14,6 @@ import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import { getUserLocation } from "./redux/features/mapSlice";
 import { setUser } from "./redux/features/userSlice";
-import "./App.css";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -44,8 +44,8 @@ function App() {
 
   return (
     <Box sx={{ height: realHeight }}>
-      <Grid sx={{ height: "7%" }}>{user && <NavbarComponent />}</Grid>
-      <Grid sx={{ height: "93%" }}>
+      <Grid sx={{ height: "6%" }}>{user && <NavbarComponent />}</Grid>
+      <Grid sx={{ height: "94%" }}>
         <Routes>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginPage />} />

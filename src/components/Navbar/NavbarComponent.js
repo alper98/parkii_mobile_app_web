@@ -70,7 +70,10 @@ const NavbarComponent = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "white", color: "black" }}>
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "white", color: "black", height: "100%" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <>
