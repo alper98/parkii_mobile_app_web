@@ -10,18 +10,17 @@ import {
   fetchRestrictions,
   setCurrentZone,
 } from "../../../redux/features/mapSlice";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
 
 export function InformationCard({ zones }) {
+  const dispatch = useDispatch();
   const coordinates = useSelector((s) => s.map.coordinates);
   const currentZone = useSelector((s) => s.map.currentZone);
   const currentRestriction = useSelector((s) => s.map.currentRestriction);
   const restrictions = useSelector((s) => s.map.restrictions);
+  const radius = useSelector((s) => s.user.settings.radius);
+
   const [parkingAllowedColor, setParkingAllowedColor] = useState("white");
   const [parkingAllowedText, setParkingAllowedText] = useState("");
-  const dispatch = useDispatch();
-  const radius = useSelector((s) => s.user.settings.radius);
 
   useEffect(() => {
     if (!zones) return;
@@ -85,15 +84,15 @@ export function InformationCard({ zones }) {
 
   useEffect(() => {
     if (currentRestriction?.parking_allowed === "yes") {
-      setParkingAllowedColor("green");
+      setParkingAllowedColor("#9CE5b8");
       setParkingAllowedText("You can park here");
     }
     if (currentRestriction?.parking_allowed === "no") {
-      setParkingAllowedColor("no");
+      setParkingAllowedColor("#D2222D");
       setParkingAllowedText("You cant park here");
     }
     if (currentRestriction?.parking_allowed === "criteria") {
-      setParkingAllowedColor("yellow");
+      setParkingAllowedColor("#FFBF00");
       setParkingAllowedText("Parking is under a criteria");
     }
   }, [currentRestriction]);
@@ -120,7 +119,7 @@ export function InformationCard({ zones }) {
       >
         {currentRestriction ? (
           <>
-            <CardContent sx={{ color: "white" }}>
+            <CardContent>
               <Grid
                 container
                 direction="row"
@@ -161,11 +160,6 @@ export function InformationCard({ zones }) {
                     </Typography>
                   </Grid>
                 )}
-                <Grid item xs={12}>
-                  <Button size="small" sx={{ color: "white" }}>
-                    Read more
-                  </Button>
-                </Grid>
               </Grid>
             </CardContent>
           </>
