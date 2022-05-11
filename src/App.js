@@ -81,7 +81,16 @@ function App() {
       <Grid sx={{ height: "92%" }}>
         <Routes>
           <Route path="*" element={user ? <NotFoundPage /> : <LoginPage />} />
-          <Route path="/" element={user ? <MapPage /> : <LoginPage />} />
+          <Route
+            path="/"
+            element={
+              user ? (
+                <Navigate to="/map" state={{ from: location }} replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
           <Route element={<ProtectedRoutes user={user} />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/camera" element={<CameraPage />} />
