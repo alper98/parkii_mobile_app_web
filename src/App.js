@@ -57,6 +57,7 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
+      if (location.pathname === "/profile") return;
       if (user) {
         let from = location.state?.from?.pathname || "/";
         navigate(from, { replace: true });

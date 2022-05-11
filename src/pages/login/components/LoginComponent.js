@@ -63,7 +63,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "#023E8A" }}
               disabled={!email || !password}
             >
               Sign In

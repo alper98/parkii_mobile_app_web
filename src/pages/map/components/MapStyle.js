@@ -1,10 +1,11 @@
 export const zonesStyle = {
   id: "zones",
-  type: "line",
+  type: "fill",
   source: "zones",
   paint: {
-    "line-color": "black",
-    "line-width": 0.75,
+    "fill-color": ["get", "navn"],
+    "fill-opacity": 0.2,
+    "fill-outline-color": "black",
   },
 };
 
@@ -13,7 +14,6 @@ export const zonesTextStyle = {
   type: "symbol",
   source: "zones",
   layout: {
-    "text-field": ["get", "beskrivelse"],
     "text-variable-anchor": ["top", "bottom", "left", "right"],
     "text-radial-offset": 0.5,
     "text-justify": "auto",

@@ -32,6 +32,16 @@ export const fetchZones = createAsyncThunk(
     if (!response) {
       thunkAPI.dispatch(setZones(null));
     }
+    response.zones.features.forEach((zone) => {
+      switch (zone.properties.kategori) {
+        case "Betalingszone":
+          zone.properties.navn = "blue";
+          break;
+        default:
+          zone.properties.navn = "black";
+          break;
+      }
+    });
     thunkAPI.dispatch(setZones(response.zones));
   }
 );

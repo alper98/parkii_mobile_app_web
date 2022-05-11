@@ -29,7 +29,14 @@ const NavbarComponent = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ height: "100%", justifyContent: "center" }}>
+    <AppBar
+      position="static"
+      sx={{
+        height: "100%",
+        justifyContent: "center",
+        backgroundColor: "#023E8A",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <DriveEtaIcon sx={{ display: { xs: "none" }, mr: 1 }} />
@@ -56,7 +63,7 @@ const NavbarComponent = () => {
               textDecoration: "none",
             }}
           >
-            Parkii.dk
+            Parkii
           </Typography>
 
           <Box sx={{ flexGrow: 0 }}>
