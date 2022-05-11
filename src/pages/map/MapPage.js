@@ -9,7 +9,11 @@ import * as spinner from "../../lotties/spinner.json";
 import {
   fetchRestrictions,
   fetchZones,
+  getUserLocation,
   setCoordinates,
+  setMapLoading,
+  setRestrictions,
+  setZones,
 } from "../../redux/features/mapSlice";
 import { InformationCard } from "./components/InformationCard";
 import { MapLayer } from "./components/MapLayer";
@@ -39,16 +43,27 @@ export default function MapPage() {
 
   useEffect(() => {
     async function fetchData() {
-      dispatch(fetchZones());
-      dispatch(
-        fetchRestrictions({
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-          distance: radius,
-        })
-      );
+      dispatch(getUserLocation());
+
+      if (!zones) {
+        dispatch(fetchZones());
+      }
+      if (!restrictions) {
+        dispatch(
+          fetchRestrictions({
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+            distance: radius,
+          })
+        );
+      }
     }
     fetchData();
+
+    return () => {
+      dispatch(setRestrictions(restrictions));
+      dispatch(setZones(zones));
+    };
   }, []);
 
   useEffect(() => {

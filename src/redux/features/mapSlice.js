@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
 import mapService from "../../api/mapService";
 
 // First, create the thunk
@@ -18,7 +17,6 @@ export const fetchRestrictions = createAsyncThunk(
 
     if (!response) {
       thunkAPI.dispatch(setMapLoading(false));
-      toast.info("We found no restrictions in your area");
       thunkAPI.dispatch(setRestrictions(null));
     }
     thunkAPI.dispatch(setRestrictions(response.restrictions));

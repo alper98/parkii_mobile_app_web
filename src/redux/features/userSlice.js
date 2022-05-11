@@ -15,18 +15,14 @@ export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
 
 export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
   const { email, password } = data;
-  const response = await toast.promise(authService.login(email, password), {
-    error: {
-      render({ data }) {
-        return data.message;
-      },
-    },
-  });
+  const response = await authService.login(email, password);
   if (!response) {
     thunkAPI.dispatch(setUser(null));
+    thunkAPI.dispatch(setToken(null));
     return null;
   }
   thunkAPI.dispatch(setUser(response.user));
+  thunkAPI.dispatch(setToken(response.access_token));
   return response.user;
 });
 
@@ -43,9 +39,11 @@ export const create = createAsyncThunk(
     });
     if (!response) {
       thunkAPI.dispatch(setUser(null));
+      thunkAPI.dispatch(setToken(null));
       return null;
     }
     thunkAPI.dispatch(setUser(response.user));
+    thunkAPI.dispatch(setToken(response.access_token));
     return response.user;
   }
 );
@@ -104,6 +102,8 @@ const initialState = {
   userStyle: "userbox://styles/userbox/streets-v9",
   user: null,
   userLoading: false,
+  prevPath: null,
+  token: localStorage.getItem("access_token"),
   settings: {
     radius: localStorage.getItem("settings") ?? 500,
   },
@@ -121,10 +121,17 @@ export const userSlice = createSlice({
     setSettings: (state, action) => {
       state.settings = { ...state.settings, ...action.payload };
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+    setPrevPath: (state, action) => {
+      state.prevPath = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setSettings } = userSlice.actions;
+export const { setUser, setSettings, setToken, setPrevPath } =
+  userSlice.actions;
 
 export default userSlice.reducer;
