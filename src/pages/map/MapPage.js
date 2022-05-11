@@ -12,7 +12,7 @@ import {
   getUserLocation,
   setCoordinates,
   setRestrictions,
-  setZones
+  setZones,
 } from "../../redux/features/mapSlice";
 import { InformationCard } from "./components/InformationCard";
 import { MapLayer } from "./components/MapLayer";
@@ -20,7 +20,7 @@ import {
   restrictionsStyle,
   restrictionsTextStyle,
   zonesStyle,
-  zonesTextStyle
+  zonesTextStyle,
 } from "./components/MapStyle";
 
 export default function MapPage() {

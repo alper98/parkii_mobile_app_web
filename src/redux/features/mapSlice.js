@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import mapService from "../../api/mapService";
 
-// First, create the thunk
 export const fetchRestrictions = createAsyncThunk(
   "maps/restrictions",
   async (coords, thunkAPI) => {
@@ -23,6 +22,18 @@ export const fetchRestrictions = createAsyncThunk(
     thunkAPI.dispatch(setMapLoading(false));
     const currentViewState = thunkAPI.getState().map.coordinates;
     thunkAPI.dispatch(setCoordinatesLastFetch(currentViewState));
+  }
+);
+export const fetchRestrictionById = createAsyncThunk(
+  "maps/fetchRestrictionById",
+  async (id, thunkAPI) => {
+    const response = await mapService.getRestriction(id);
+    if (!response) {
+      thunkAPI.dispatch(setCurrentRestriction(null));
+      return null;
+    }
+    thunkAPI.dispatch(setCurrentRestriction(response.restriction));
+    return response.restriction;
   }
 );
 export const fetchZones = createAsyncThunk(
@@ -86,6 +97,7 @@ const initialState = {
   restrictions: null,
   zones: null,
   currentZone: null,
+  currentRestriction: null,
 };
 
 export const mapSlice = createSlice({
@@ -107,6 +119,9 @@ export const mapSlice = createSlice({
     setCurrentZone: (state, action) => {
       state.currentZone = action.payload;
     },
+    setCurrentRestriction: (state, action) => {
+      state.currentRestriction = action.payload;
+    },
     setMapLoading: (state, action) => {
       state.mapLoading = action.payload;
     },
@@ -124,6 +139,7 @@ export const {
   setCurrentZone,
   setCoordinatesLastFetch,
   setMapLoading,
+  setCurrentRestriction,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

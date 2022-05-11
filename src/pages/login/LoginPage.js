@@ -1,7 +1,6 @@
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { create, login } from "../../redux/features/userSlice";
 import LoginComponent from "./components/LoginComponent";
 import SignUpComponent from "./components/SignUpComponent";

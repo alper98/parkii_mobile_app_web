@@ -14,6 +14,14 @@ class MapService {
       return false;
     }
   };
+  getRestriction = async (id) => {
+    const response = await api.get(`/parking/restrictions/${id}`);
+    if (response.data) {
+      return { restriction: response.data };
+    } else {
+      return false;
+    }
+  };
   getZones = async () => {
     const response = await api.get("/parking/zones");
     if (response.data.features.length > 0) {
