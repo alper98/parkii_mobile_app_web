@@ -15,11 +15,11 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (email, password) => {
-    const user = await dispatch(login({ email, password })).unwrap();
+    await dispatch(login({ email, password })).unwrap();
   };
 
   const handleSignUp = async (data) => {
-    const user = await dispatch(create(data)).unwrap();
+    await dispatch(create(data)).unwrap();
   };
 
   return (
