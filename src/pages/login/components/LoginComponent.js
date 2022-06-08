@@ -6,10 +6,12 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const errorMessage = useSelector((s) => s.user.errorMessage);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -31,6 +33,7 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
             Log in
           </Typography>
           <Box
+            id="login-form"
             component="form"
             onSubmit={handleClick}
             noValidate
@@ -59,6 +62,11 @@ export default function LoginComponent({ handleLoginSignUp, handleLogin }) {
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
             />
+            {errorMessage && (
+              <Typography component="h1" variant="h5" sx={{ color: "red" }}>
+                {errorMessage}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth

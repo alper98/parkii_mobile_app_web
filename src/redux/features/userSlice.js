@@ -16,13 +16,16 @@ export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
 export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
   const { email, password } = data;
   const response = await authService.login(email, password);
-  if (!response) {
+  console.log(response);
+  if (response.error) {
     thunkAPI.dispatch(setUser(null));
     thunkAPI.dispatch(setToken(null));
+    thunkAPI.dispatch(setErrorMessage(response.error));
     return null;
   }
   thunkAPI.dispatch(setUser(response.user));
   thunkAPI.dispatch(setToken(response.access_token));
+  thunkAPI.dispatch(setErrorMessage(null));
   return response.user;
 });
 
@@ -104,6 +107,7 @@ const initialState = {
   userLoading: false,
   prevPath: null,
   token: localStorage.getItem("access_token"),
+  errorMessage: null,
   settings: {
     radius: localStorage.getItem("settings") ?? 500,
   },
@@ -124,6 +128,9 @@ export const userSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload;
     },
+    setErrorMessage: (state, action) => {
+      state.errorMessage = action.payload;
+    },
     setPrevPath: (state, action) => {
       state.prevPath = action.payload;
     },
@@ -131,7 +138,7 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setSettings, setToken, setPrevPath } =
+export const { setUser, setSettings, setToken, setPrevPath, setErrorMessage } =
   userSlice.actions;
 
 export default userSlice.reducer;

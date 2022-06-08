@@ -10,6 +10,12 @@ import App from "./App";
 import { store } from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+//We add these 3 lines here
+if (window.Cypress) {
+  window.store = store;
+}
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
